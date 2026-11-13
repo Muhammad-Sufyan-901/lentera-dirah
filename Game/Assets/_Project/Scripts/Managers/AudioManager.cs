@@ -24,7 +24,7 @@ namespace LenteraDirah
         [SerializeField] private AudioClip sfxVictory;
 
         [Header("Pengaturan")]
-        [Range(0f, 1f)] [SerializeField] private float bgmVolume = 0.45f;
+        [Range(0f, 1f)] [SerializeField] private float bgmVolume = 0.35f;
         [Range(0f, 1f)] [SerializeField] private float sfxVolume = 0.85f;
 
         private AudioSource bgmSource;

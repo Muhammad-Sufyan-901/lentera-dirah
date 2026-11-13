@@ -13,7 +13,9 @@ Dibuat dengan **Unity 6000.6.9f1** + **URP 17.6 (2D Lights)** untuk mata kuliah 
 - **FSM 3 level**: `GameManager` (MainMenu/IntroDialog/Playing/Victory/GameOver), `PlayerController` (Idle/Walking/CastingLight/Hurt), `EnemyShadowAI` (Patrol/Chase/Stunned)
 - **Mekanik 1** — Sacred Lontar Collection & Altar Seal: 3 Lontar (Usada, Dharma, Rwa Bhineda) membuka segel Altar
 - **Mekanik 2** — Dynamic Lantern & Holy Light Burst: energi menyusut **2%/dtk** (radius `Light 2D` 6.0→1.8), Minyak Obor **+35%**, `SPACE` = burst **-15%** energi, cooldown **4 dtk**, stun radius **3.5** selama **3 dtk**
-- Collision solid (TilemapCollider2D) & trigger (item, altar), kamera smooth-follow, animasi 4 arah, BGM + 5 SFX
+- Collision solid (TilemapCollider2D) & trigger (item, altar), kamera smooth-follow, animasi 4 arah, SFX 5 event
+- **Bahula bergaya Bali**: kemeja/kamen putih dengan sabuk emas dan **udeng coklat** (hasil restyle sprite 4 arah, lihat `Art/Characters/LICENSE_Bahula_Restyle.md`)
+- **BGM gamelan Bali**: rekaman *Gendér Wayang* (1928) berstatus public domain, loop selama permainan
 - **Unsur budaya Bali**: gapura/candi bentar sebagai pintu keluar desa & gerbang sektor utara, pohon beringin berakar gantung, pura meru bertingkat, bale kulkul, pelinggih, dan penjor — plus latar gapura/beringin/penjor di main menu
 - **Automasi editor**: seluruh scene dirakit 1 klik dari menu `Tools → Lentera Dirah`
 
@@ -62,5 +64,7 @@ Detail lengkap: [`README_GAMEPLAY.md`](README_GAMEPLAY.md) · rencana fase: [`IM
 
 - [**Ninja Adventure Asset Pack**](https://github.com/pixel-boy/NinjaAdventure) — Pixel-Boy & AAA, **CC0 1.0** (karakter, monster, item, tileset, UI, font, SFX, BGM). Teks lisensi: `Game/Assets/_Project/LICENSE_NinjaAdventure_CC0.txt`.
 - **Aset lingkungan Bali** (gapura, beringin, meru, bale kulkul, pelinggih, penjor) — dibuat khusus untuk proyek ini via `Game/Tools/generate_balinese_assets.py`, dilepas **CC0 1.0** (`Game/Assets/_Project/Art/Environment/LICENSE_CC0.md`).
+- **BGM** — *Gendér Wayang* (1928), Gamelan Gender Wayang Bali, **Public Domain**, sumber [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Gend%C3%A9r_Wayang_(1928).ogg); rincian di `Game/Assets/_Project/Audio/BGM/LICENSE_BGM.md`.
+- **Restyle Bahula** — turunan CC0 dari Ninja Adventure, dimodifikasi via `Game/Tools/restyle_bahula_balinese.py` (`Art/Characters/LICENSE_Bahula_Restyle.md`).
 - **Universal Render Pipeline 2D Lights** — Unity Technologies (Unity Companion License).
 - Kode game pada repository ini ditulis untuk keperluan akademik.

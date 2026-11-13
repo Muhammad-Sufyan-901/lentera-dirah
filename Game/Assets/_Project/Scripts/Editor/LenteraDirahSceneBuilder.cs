@@ -732,7 +732,7 @@ namespace LenteraDirah.Editor
 
         private static void BindAudio(AudioManager audioManager)
         {
-            Bind(audioManager, "bgmClip", AssetDatabase.LoadAssetAtPath<AudioClip>(ProjectConfigurator.ProjectRoot + "/Audio/BGM/bgm_gender_girah.ogg"));
+            Bind(audioManager, "bgmClip", AssetDatabase.LoadAssetAtPath<AudioClip>(ProjectConfigurator.ProjectRoot + "/Audio/BGM/bgm_gamelan_girah.ogg"));
             Bind(audioManager, "sfxLontar", AssetDatabase.LoadAssetAtPath<AudioClip>(ProjectConfigurator.ProjectRoot + "/Audio/SFX/pickup_lontar.wav"));
             Bind(audioManager, "sfxBurst", AssetDatabase.LoadAssetAtPath<AudioClip>(ProjectConfigurator.ProjectRoot + "/Audio/SFX/light_burst.wav"));
             Bind(audioManager, "sfxOil", AssetDatabase.LoadAssetAtPath<AudioClip>(ProjectConfigurator.ProjectRoot + "/Audio/SFX/pickup_oil.wav"));
