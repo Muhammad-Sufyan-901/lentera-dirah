@@ -1,0 +1,604 @@
+fileFormatVersion: 2
+guid: 978523c4404c74357963ed6faf093220
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 955657884709606790
+    second: Bahula_SpriteSheet_0
+  - first:
+      213: 1356136811465771759
+    second: Bahula_SpriteSheet_1
+  - first:
+      213: -5040854980823518605
+    second: Bahula_SpriteSheet_2
+  - first:
+      213: 3143762581577103713
+    second: Bahula_SpriteSheet_3
+  - first:
+      213: -3471641497252622503
+    second: Bahula_SpriteSheet_4
+  - first:
+      213: -2759069244720340470
+    second: Bahula_SpriteSheet_5
+  - first:
+      213: 4782906083785719088
+    second: Bahula_SpriteSheet_6
+  - first:
+      213: -4319087218169473815
+    second: Bahula_SpriteSheet_7
+  - first:
+      213: 3890987180701381545
+    second: Bahula_SpriteSheet_8
+  - first:
+      213: 2957377387014099475
+    second: Bahula_SpriteSheet_9
+  - first:
+      213: -4809329004192872859
+    second: Bahula_SpriteSheet_10
+  - first:
+      213: -4783690697053429793
+    second: Bahula_SpriteSheet_11
+  - first:
+      213: -4096209324001373072
+    second: Bahula_SpriteSheet_12
+  - first:
+      213: 6593637479459747202
+    second: Bahula_SpriteSheet_13
+  - first:
+      213: -3776910647096208562
+    second: Bahula_SpriteSheet_0_0
+  - first:
+      213: -6980016672346794609
+    second: Bahula_SpriteSheet_1_0
+  - first:
+      213: 1454911900418875857
+    second: Bahula_SpriteSheet_2_0
+  - first:
+      213: 4077840370170906087
+    second: Bahula_SpriteSheet_3_0
+  - first:
+      213: 4801460339898585077
+    second: Bahula_SpriteSheet_0_1
+  - first:
+      213: -6376706073057075024
+    second: Bahula_SpriteSheet_1_1
+  - first:
+      213: -3450814023057631996
+    second: Bahula_SpriteSheet_2_1
+  - first:
+      213: 557386727378411296
+    second: Bahula_SpriteSheet_3_1
+  - first:
+      213: 1735247186571085045
+    second: Bahula_SpriteSheet_0_2
+  - first:
+      213: 4451344826008309634
+    second: Bahula_SpriteSheet_1_2
+  - first:
+      213: -1807018556439034456
+    second: Bahula_SpriteSheet_2_2
+  - first:
+      213: 8693792670621429070
+    second: Bahula_SpriteSheet_3_2
+  - first:
+      213: -5732786199995009234
+    second: Bahula_SpriteSheet_0_3
+  - first:
+      213: -5684582128131138425
+    second: Bahula_SpriteSheet_1_3
+  - first:
+      213: -4070284656743872862
+    second: Bahula_SpriteSheet_2_3
+  - first:
+      213: -2133009286454303386
+    second: Bahula_SpriteSheet_3_3
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_0_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e43907307c7b59bc0800000000000000
+      internalID: -3776910647096208562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_1_0
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f85177671dff12f90800000000000000
+      internalID: -6980016672346794609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_2_0
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d1a4fb3aa2e03410800000000000000
+      internalID: 1454911900418875857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_3_0
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e5c8ca1636679830800000000000000
+      internalID: 4077840370170906087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_0_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ff08ca6db632a240800000000000000
+      internalID: 4801460339898585077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_1_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b06b5e9c936187a0800000000000000
+      internalID: -6376706073057075024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_2_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40596b1edee3c10d0800000000000000
+      internalID: -3450814023057631996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_3_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02f58ef764c3cb700800000000000000
+      internalID: 557386727378411296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_0_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f4c0195f16d41810800000000000000
+      internalID: 1735247186571085045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_1_2
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28f8ff6f88a56cd30800000000000000
+      internalID: 4451344826008309634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_2_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a589e8623e2ce6e0800000000000000
+      internalID: -1807018556439034456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_3_2
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4de84b4f5e86a870800000000000000
+      internalID: 8693792670621429070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_0_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e273900235d0170b0800000000000000
+      internalID: -5732786199995009234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_1_3
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78c95343cae4c11b0800000000000000
+      internalID: -5684582128131138425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_2_3
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a60f048ba17387c0800000000000000
+      internalID: -4070284656743872862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bahula_SpriteSheet_3_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 665284aea570662e0800000000000000
+      internalID: -2133009286454303386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Bahula_SpriteSheet_0: 955657884709606790
+      Bahula_SpriteSheet_0_0: -3776910647096208562
+      Bahula_SpriteSheet_0_1: 4801460339898585077
+      Bahula_SpriteSheet_0_2: 1735247186571085045
+      Bahula_SpriteSheet_0_3: -5732786199995009234
+      Bahula_SpriteSheet_1: 1356136811465771759
+      Bahula_SpriteSheet_10: -4809329004192872859
+      Bahula_SpriteSheet_11: -4783690697053429793
+      Bahula_SpriteSheet_12: -4096209324001373072
+      Bahula_SpriteSheet_13: 6593637479459747202
+      Bahula_SpriteSheet_1_0: -6980016672346794609
+      Bahula_SpriteSheet_1_1: -6376706073057075024
+      Bahula_SpriteSheet_1_2: 4451344826008309634
+      Bahula_SpriteSheet_1_3: -5684582128131138425
+      Bahula_SpriteSheet_2: -5040854980823518605
+      Bahula_SpriteSheet_2_0: 1454911900418875857
+      Bahula_SpriteSheet_2_1: -3450814023057631996
+      Bahula_SpriteSheet_2_2: -1807018556439034456
+      Bahula_SpriteSheet_2_3: -4070284656743872862
+      Bahula_SpriteSheet_3: 3143762581577103713
+      Bahula_SpriteSheet_3_0: 4077840370170906087
+      Bahula_SpriteSheet_3_1: 557386727378411296
+      Bahula_SpriteSheet_3_2: 8693792670621429070
+      Bahula_SpriteSheet_3_3: -2133009286454303386
+      Bahula_SpriteSheet_4: -3471641497252622503
+      Bahula_SpriteSheet_5: -2759069244720340470
+      Bahula_SpriteSheet_6: 4782906083785719088
+      Bahula_SpriteSheet_7: -4319087218169473815
+      Bahula_SpriteSheet_8: 3890987180701381545
+      Bahula_SpriteSheet_9: 2957377387014099475
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

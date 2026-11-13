@@ -1,0 +1,37 @@
+# --- Unity generated ---
+Game/[Ll]ibrary/
+Game/[Tt]emp/
+Game/[Oo]bj/
+Game/[Bb]uild/
+Game/[Bb]uilds/
+Game/[Ll]ogs/
+Game/[Mm]emoryCaptures/
+Game/[Rr]ecordings/
+Game/[Uu]ser[Ss]ettings/
+Game/[Aa]ssets/AssetStoreTools*
+
+# --- Unity IDE / project files ---
+Game/*.csproj
+Game/*.unityproj
+Game/*.sln
+Game/*.suo
+Game/*.user
+Game/*.userprefs
+Game/*.pidb
+Game/*.booproj
+Game/*.svd
+Game/*.pdb
+Game/*.mdb
+Game/*.opendb
+Game/*.VC.db
+Game/.vs/
+Game/.idea/
+Game/.vscode/
+
+# --- macOS / editors ---
+.DS_Store
+*.swp
+*~
+
+# --- local agent/tool config ---
+.commandcode/
