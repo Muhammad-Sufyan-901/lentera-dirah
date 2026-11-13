@@ -57,6 +57,7 @@ namespace LenteraDirah.Editor
                 ArtRoot + "/Monsters",
                 ArtRoot + "/Items",
                 ArtRoot + "/Tilesets",
+                ArtRoot + "/Environment",
                 ArtRoot + "/UI",
                 ArtRoot + "/Animations",
                 ArtRoot + "/Materials",
