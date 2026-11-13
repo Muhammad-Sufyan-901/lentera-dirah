@@ -57,6 +57,7 @@ namespace LenteraDirah.Editor
             public Text VictoryText;
             public Text GameOverText;
             public Button StartButton;
+            public Button QuitButton;
             public Button DialogButton;
             public Button VictoryButton;
             public Button GameOverButton;
@@ -146,6 +147,7 @@ namespace LenteraDirah.Editor
             Bind(uiManager, "victoryText", uiRefs.VictoryText);
             Bind(uiManager, "gameOverText", uiRefs.GameOverText);
             Bind(uiManager, "startButton", uiRefs.StartButton);
+            Bind(uiManager, "quitButton", uiRefs.QuitButton);
             Bind(uiManager, "dialogButton", uiRefs.DialogButton);
             Bind(uiManager, "victoryButton", uiRefs.VictoryButton);
             Bind(uiManager, "gameOverButton", uiRefs.GameOverButton);
@@ -771,8 +773,9 @@ namespace LenteraDirah.Editor
             refs.HintText = hud.HintText;
             refs.Hearts = hud.Hearts;
 
-            refs.MainMenu = CreateMainMenu(canvas.transform, panelSprite, dialogSprite, out Button startButton);
+            refs.MainMenu = CreateMainMenu(canvas.transform, panelSprite, dialogSprite, out Button startButton, out Button quitButton);
             refs.StartButton = startButton;
+            refs.QuitButton = quitButton;
 
             refs.Dialog = CreateDialog(canvas.transform, panelSprite, dialogSprite, mpuPortrait, out Text dialogText, out Button dialogButton);
             refs.DialogText = dialogText;
@@ -851,7 +854,8 @@ namespace LenteraDirah.Editor
             return refs;
         }
 
-        private static GameObject CreateMainMenu(Transform canvas, Sprite panelSprite, Sprite buttonSprite, out Button startButton)
+        private static GameObject CreateMainMenu(Transform canvas, Sprite panelSprite, Sprite buttonSprite,
+            out Button startButton, out Button quitButton)
         {
             GameObject panel = CreateOverlay(canvas, "MainMenu_Panel", new Color(Midnight.r, Midnight.g, Midnight.b, 0.94f));
 
@@ -915,10 +919,11 @@ namespace LenteraDirah.Editor
                 24, new Color(0.88f, 0.85f, 0.8f), TextAnchor.MiddleCenter);
 
             RectTransform footnote = Place(NewRect("Footnote", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                new Vector2(0f, -240f), new Vector2(900f, 40f));
+                new Vector2(0f, -282f), new Vector2(900f, 40f));
             AddText(footnote, "Rwa Bhineda — terang dan gelap saling menyeimbangkan", 20, new Color(0.64f, 0.784f, 1f), TextAnchor.MiddleCenter);
 
-            startButton = CreateButton(box, "StartButton", "MULAI PENYUCIAN", buttonSprite, new Vector2(0f, -120f), new Vector2(480f, 84f));
+            startButton = CreateButton(box, "StartButton", "MULAI PENYUCIAN", buttonSprite, new Vector2(0f, -110f), new Vector2(480f, 84f));
+            quitButton = CreateButton(box, "QuitButton", "KELUAR", buttonSprite, new Vector2(0f, -206f), new Vector2(300f, 62f));
 
             return panel;
         }
