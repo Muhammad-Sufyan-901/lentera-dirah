@@ -113,6 +113,7 @@ namespace LenteraDirah.Editor
 
             CreateGlobalLight(root.transform);
             CreateTilemaps(root.transform, open, litMaterial);
+            CreateBalineseProps(root.transform, litMaterial);
             GameObject player = CreatePlayer(root.transform, litMaterial);
             CreateEnemies(root.transform, litMaterial);
             CreateCollectibles(root.transform, litMaterial);
@@ -314,6 +315,122 @@ namespace LenteraDirah.Editor
             EditorUtility.SetDirty(tile);
 
             return tile;
+        }
+
+        private static void CreateBalineseProps(Transform parent, Material litMaterial)
+        {
+            GameObject props = new GameObject("BalineseProps");
+            props.transform.SetParent(parent, false);
+
+            CreateGapura(props.transform, litMaterial, "GapuraKeluar", new Vector3(21.5f, 9f, 0f), 0.85f);
+            CreateGapura(props.transform, litMaterial, "GapuraUtara", new Vector3(21.5f, 24.2f, 0f), 0.85f);
+
+            CreateBeringin(props.transform, litMaterial, "Beringin_Plaza_BaratDaya", new Vector3(17.5f, 14.5f, 0f), true);
+            CreateBeringin(props.transform, litMaterial, "Beringin_Plaza_TimurDaya", new Vector3(26.5f, 14.5f, 0f), true);
+            CreateBeringin(props.transform, litMaterial, "Beringin_Plaza_BaratLaut", new Vector3(17.5f, 20.5f, 0f), true);
+            CreateBeringin(props.transform, litMaterial, "Beringin_Plaza_TimurLaut", new Vector3(26.5f, 20.5f, 0f), true);
+            CreateBeringin(props.transform, litMaterial, "Beringin_SektorBarat", new Vector3(4.8f, 19.5f, 0f), true);
+            CreateBeringin(props.transform, litMaterial, "Beringin_SektorTimur", new Vector3(38.2f, 19.5f, 0f), true);
+            CreateBeringin(props.transform, litMaterial, "Beringin_SektorUtara", new Vector3(19.2f, 28.5f, 0f), false);
+
+            CreateMeru(props.transform, litMaterial, "PuraMeru_SektorBarat", new Vector3(7.5f, 18f, 0f));
+            CreateMeru(props.transform, litMaterial, "PuraMeru_SektorTimur", new Vector3(35.5f, 18f, 0f));
+
+            CreateBaleKulkul(props.transform, litMaterial, "BaleKulkul_AlunAlun", new Vector3(25.5f, 18.5f, 0f));
+            CreateBaleKulkul(props.transform, litMaterial, "BaleKulkul_SektorUtara", new Vector3(23f, 28.7f, 0f));
+
+            CreatePelinggih(props.transform, litMaterial, "Pelinggih_BaratDaya", new Vector3(16.9f, 13.6f, 0f));
+            CreatePelinggih(props.transform, litMaterial, "Pelinggih_TimurDaya", new Vector3(27.1f, 13.6f, 0f));
+            CreatePelinggih(props.transform, litMaterial, "Pelinggih_BaratLaut", new Vector3(16.9f, 20.4f, 0f));
+            CreatePelinggih(props.transform, litMaterial, "Pelinggih_TimurLaut", new Vector3(27.1f, 20.4f, 0f));
+
+            Vector2[] penjorPositions =
+            {
+                new Vector2(16.7f, 16.5f), new Vector2(27.3f, 16.5f),
+                new Vector2(20f, 13.2f), new Vector2(23.5f, 13.2f),
+                new Vector2(20f, 21.3f), new Vector2(23.5f, 21.3f)
+            };
+
+            for (int i = 0; i < penjorPositions.Length; i++)
+            {
+                CreateEnvironmentProp(props.transform, litMaterial, $"Penjor_{i + 1}", "Penjor.png",
+                    new Vector3(penjorPositions[i].x, penjorPositions[i].y, 0f), 10, 1f);
+            }
+        }
+
+        private static void CreateGapura(Transform parent, Material material, string name, Vector3 position, float scale)
+        {
+            GameObject gate = CreateEnvironmentProp(parent, material, name, "Gapura_CandiBentar.png", position, 9, scale);
+
+            AddBoxCollider(gate, new Vector2(-1.9f, -1.3f), new Vector2(1.7f, 2.4f));
+            AddBoxCollider(gate, new Vector2(1.9f, -1.3f), new Vector2(1.7f, 2.4f));
+
+            GameObject lightObject = new GameObject("GapuraLight");
+            lightObject.transform.SetParent(gate.transform, false);
+            lightObject.transform.localPosition = new Vector3(0f, 2.1f, 0f);
+
+            Light2D light = lightObject.AddComponent<Light2D>();
+            light.lightType = Light2D.LightType.Point;
+            light.color = Gold;
+            light.intensity = 0.8f;
+            light.pointLightOuterRadius = 3.2f;
+            light.pointLightInnerRadius = 0.3f;
+        }
+
+        private static void CreateBeringin(Transform parent, Material material, string name, Vector3 position, bool large)
+        {
+            string spriteFile = large ? "PohonBeringin_Besar.png" : "PohonBeringin_Kecil.png";
+            GameObject tree = CreateEnvironmentProp(parent, material, name, spriteFile, position, 11, 1f);
+
+            AddCircleCollider(tree, new Vector2(0f, large ? -2.1f : -1.6f), large ? 0.45f : 0.35f);
+        }
+
+        private static void CreateMeru(Transform parent, Material material, string name, Vector3 position)
+        {
+            GameObject meru = CreateEnvironmentProp(parent, material, name, "PuraMeru.png", position, 11, 1f);
+            AddBoxCollider(meru, new Vector2(0f, -2.1f), new Vector2(1.4f, 1.8f));
+        }
+
+        private static void CreateBaleKulkul(Transform parent, Material material, string name, Vector3 position)
+        {
+            GameObject bale = CreateEnvironmentProp(parent, material, name, "BaleKulkul.png", position, 11, 1f);
+            AddBoxCollider(bale, new Vector2(0f, -1f), new Vector2(1.6f, 1f));
+        }
+
+        private static void CreatePelinggih(Transform parent, Material material, string name, Vector3 position)
+        {
+            GameObject shrine = CreateEnvironmentProp(parent, material, name, "Pelinggih.png", position, 10, 1f);
+            AddBoxCollider(shrine, new Vector2(0f, -0.7f), new Vector2(0.8f, 0.6f));
+        }
+
+        private static GameObject CreateEnvironmentProp(Transform parent, Material material, string name, string spriteFile,
+            Vector3 position, int sortingOrder, float scale)
+        {
+            GameObject prop = new GameObject(name);
+            prop.transform.SetParent(parent, false);
+            prop.transform.position = position;
+            prop.transform.localScale = Vector3.one * scale;
+
+            SpriteRenderer renderer = prop.AddComponent<SpriteRenderer>();
+            renderer.sprite = ProjectConfigurator.GetSpriteByIndex(ProjectConfigurator.ArtRoot + "/Environment/" + spriteFile, 0);
+            renderer.sortingOrder = sortingOrder;
+            renderer.sharedMaterial = material;
+
+            return prop;
+        }
+
+        private static void AddBoxCollider(GameObject target, Vector2 offset, Vector2 size)
+        {
+            BoxCollider2D collider = target.AddComponent<BoxCollider2D>();
+            collider.offset = offset;
+            collider.size = size;
+        }
+
+        private static void AddCircleCollider(GameObject target, Vector2 offset, float radius)
+        {
+            CircleCollider2D collider = target.AddComponent<CircleCollider2D>();
+            collider.offset = offset;
+            collider.radius = radius;
         }
 
         private static GameObject CreatePlayer(Transform parent, Material litMaterial)
@@ -737,9 +854,50 @@ namespace LenteraDirah.Editor
         private static GameObject CreateMainMenu(Transform canvas, Sprite panelSprite, Sprite buttonSprite, out Button startButton)
         {
             GameObject panel = CreateOverlay(canvas, "MainMenu_Panel", new Color(Midnight.r, Midnight.g, Midnight.b, 0.94f));
+
+            Sprite gapuraBackdrop = ProjectConfigurator.GetSpriteByIndex(ProjectConfigurator.ArtRoot + "/Environment/Gapura_Menu.png", 0);
+            Sprite beringinBackdrop = ProjectConfigurator.GetSpriteByIndex(ProjectConfigurator.ArtRoot + "/Environment/PohonBeringin_Besar.png", 0);
+            Sprite penjorBackdrop = ProjectConfigurator.GetSpriteByIndex(ProjectConfigurator.ArtRoot + "/Environment/Penjor.png", 0);
+
+            RectTransform backdrop = Stretch(NewRect("Backdrop", panel.transform));
+
+            Image gateBackdrop = AddImage(
+                Place(NewRect("GapuraBackdrop", backdrop), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, 25f), new Vector2(900f, 750f)),
+                gapuraBackdrop, new Color(1f, 1f, 1f, 0.26f), false);
+            gateBackdrop.preserveAspect = true;
+
+            Image treeBackdropLeft = AddImage(
+                Place(NewRect("BeringinBackdrop_Kiri", backdrop), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(-700f, -40f), new Vector2(420f, 540f)),
+                beringinBackdrop, new Color(0.05f, 0.055f, 0.1f, 0.96f), false);
+            treeBackdropLeft.preserveAspect = true;
+
+            Image treeBackdropRight = AddImage(
+                Place(NewRect("BeringinBackdrop_Kanan", backdrop), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(700f, -40f), new Vector2(420f, 540f)),
+                beringinBackdrop, new Color(0.05f, 0.055f, 0.1f, 0.96f), false);
+            treeBackdropRight.preserveAspect = true;
+
+            AddImage(Place(NewRect("PenjorBackdrop_Kiri", backdrop), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(-645f, -120f), new Vector2(150f, 600f)),
+                penjorBackdrop, new Color(1f, 0.72f, 0.3f, 0.38f), false);
+
+            AddImage(Place(NewRect("PenjorBackdrop_Kanan", backdrop), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(645f, -120f), new Vector2(150f, 600f)),
+                penjorBackdrop, new Color(1f, 0.72f, 0.3f, 0.38f), false);
+
             RectTransform box = Place(NewRect("MenuBox", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
                 new Vector2(0f, 0f), new Vector2(1120f, 720f));
-            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.96f), true);
+            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.88f), true);
+
+            AddImage(Place(NewRect("Ornament_Atas", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, 298f), new Vector2(760f, 2f)),
+                null, new Color(Gold.r, Gold.g, Gold.b, 0.55f), false);
+
+            AddImage(Place(NewRect("Ornament_Bawah", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, 104f), new Vector2(760f, 2f)),
+                null, new Color(Gold.r, Gold.g, Gold.b, 0.35f), false);
 
             RectTransform title = Place(NewRect("Title", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
                 new Vector2(0f, 230f), new Vector2(1000f, 120f));

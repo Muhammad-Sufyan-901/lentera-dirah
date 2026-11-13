@@ -102,6 +102,27 @@ namespace LenteraDirah.Editor
                     }
 
                     SaveRenderTarget("preview_gameplay.png");
+
+                    CameraFollow2D follow = sceneCamera.GetComponent<CameraFollow2D>();
+                    if (follow != null)
+                    {
+                        follow.enabled = false;
+                    }
+
+                    sceneCamera.orthographicSize = 21f;
+                    sceneCamera.transform.position = new Vector3(22f, 16f, -10f);
+
+                    state = 4;
+                    frames = 0;
+                    break;
+
+                case 4:
+                    if (frames < 5)
+                    {
+                        return;
+                    }
+
+                    SaveRenderTarget("preview_world.png");
                     Finish();
                     break;
             }

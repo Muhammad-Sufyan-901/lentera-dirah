@@ -140,9 +140,22 @@ Screenshot hasil render nyata (play mode) tersimpan di `Game/Docs/`:
 
 | File | Isi |
 |---|---|
-| `preview_menu.png` | Layar Main Menu "LENTERA DIRAH" + tombol MULAI PENYUCIAN |
+| `preview_menu.png` | Layar Main Menu "LENTERA DIRAH" + gapura, beringin, penjor di latar |
 | `preview_dialog.png` | Dialog Mpu Bharada dengan potret + naskah GDD |
 | `preview_gameplay.png` | HUD gameplay: 3 nyawa, bar energi 98%, counter Lontar, radius lentera di kegelapan |
+| `preview_world.png` | Peta Desa Girah: 2 gapura, pura meru, bale kulkul, beringin, pelinggih, penjor |
+
+### Unsur Budaya Bali di Dunia
+
+| Objek | Lokasi | Peran |
+|---|---|---|
+| **Gapura Candi Bentar (keluar)** | spawn selatan `(21.5, 9)` | pengganti portal keluar desa, tiang solid dan tengah bisa dilewati |
+| **Gapura Candi Bentar (utara)** | `(21.5, 24.2)` | penanda gerbang sektor utara |
+| **Pohon Beringin** | 4 sudut alun-alun + 3 sektor | naungan & penanda ruang, collider hanya di batang |
+| **Pura Meru** | sektor barat & timur | bangunan suci bertingkat, collider di dasar |
+| **Bale Kulkul** | alun-alun & sektor utara | menara kentongan |
+| **Pelinggih** | 4 sudut alun-alun | altar kecil |
+| **Penjor** | tepi alun-alun | dekorasi bambu berhias, tanpa collider |
 
 Uji otomatis (play mode, 19 assertion) dapat dijalankan ulang dengan:
 
