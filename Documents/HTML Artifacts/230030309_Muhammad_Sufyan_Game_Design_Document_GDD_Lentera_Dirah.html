@@ -538,7 +538,7 @@
       <tr><td class="toc-sub"><a href="#gdd-7-3">7.3 Pemetaan Aset Visual 2D (Karakter, Artefak, dan Environment)</a></td></tr>
       <tr><td class="toc-sub"><a href="#gdd-7-4">7.4 Aset UI/HUD dan Audio</a></td></tr>
       <tr><td class="toc-sub"><a href="#gdd-7-5">7.5 Pencahayaan Dinamis (Unity URP 2D Lights)</a></td></tr>
-      <tr><td class="toc-chapter"><a href="#gdd-bab8">8. BAB VIII: STRUKTUR PROJECT UNITY &amp; PETA JALAN PENGEMBANGAN UAS</a></td></tr>
+      <tr><td class="toc-chapter"><a href="#gdd-bab8">8. BAB VIII: STRUKTUR PROJECT UNITY &amp; PETA JALAN PENGEMBANGAN FASE BERIKUTNYA</a></td></tr>
     </table>
 
     <!-- ==================== BAB I: GAME OVERVIEW ==================== -->
@@ -568,11 +568,11 @@
         </tr>
         <tr>
           <td><b>Game Engine &amp; Pipeline</b></td>
-          <td>Unity 2D (Universal Render Pipeline / URP 2D Lights) dengan bahasa pemrograman C#</td>
+          <td>Unity 6000.6.9f1 &mdash; 2D (Universal Render Pipeline 17.6 / URP 2D Lights) dengan bahasa pemrograman C#</td>
         </tr>
         <tr>
           <td><b>Target Platform</b></td>
-          <td>PC Executable Build (Windows <code>.exe</code> / macOS <code>.app</code>) &mdash; <i>Siap diekspansi ke Android (<code>.apk</code>) pada Proyek Akhir (UAS)</i></td>
+          <td>PC Executable Build (Windows <code>.exe</code> / macOS <code>.app</code>) &mdash; build terverifikasi: <b>macOS <code>.app</code></b>; <i>siap diekspansi ke Android (<code>.apk</code>) pada Proyek Akhir (UAS)</i></td>
         </tr>
         <tr>
           <td><b>Perspektif Kamera</b></td>
@@ -716,7 +716,7 @@
       <tbody>
         <tr>
           <td>Pemain / NPC</td>
-          <td>Pohon Bambu, Pagar Batu, Bangunan Desa</td>
+          <td>Pohon Bambu, Pagar Batu, Gapura, Pura, Bale, Pelinggih, dan Bangunan Desa</td>
           <td><b>Solid Collision</b><br>(<code>Is Trigger = false</code>)</td>
           <td>Menahan pergerakan fisik objek menggunakan <code>BoxCollider2D</code> dan <code>Tilemap&#8203;Collider2D</code> agar tidak menembus batas lingkungan desa.</td>
         </tr>
@@ -918,9 +918,13 @@
       </tbody>
     </table>
 
+    <p>
+      Kostum Bahula di-<i>restyle</i> agar merefleksikan busana adat Bali: kemeja dan kamen putih (<code>#F4EFE6</code>), udeng coklat (<code>#6B4A2F</code>), serta sabuk emas (<code>#FFB84D</code>), dengan kulit dan garis mata dipertahankan agar tetap terbaca pada ukuran 16&times;16 piksel.
+    </p>
+
     <h2 class="section-title" id="gdd-5-2">5.2 Penerapan Prinsip Animasi Dasar (Basic Animation Principles)</h2>
     <ol>
-      <li><b>Pose-to-Pose &amp; Walk Cycle Timing:</b> Karakter Bahula dan NPC Bayangan memiliki siklus animasi jalan 4 arah (Atas, Bawah, Kiri, Kanan) menggunakan <code>Animator Controller</code> dan <i>Blend Tree</i> di Unity.</li>
+      <li><b>Pose-to-Pose &amp; Walk Cycle Timing:</b> Karakter Bahula dan NPC Bayangan memiliki siklus animasi jalan 4 arah (Atas, Bawah, Kiri, Kanan) menggunakan <code>Animator Controller</code> dengan 8 klip state (Idle dan Walking untuk 4 arah) yang dipanggil melalui <code>Animator.Play</code> sesuai arah hadap, tanpa <i>Blend Tree</i> agar transisi deterministik.</li>
       <li><b>Squash, Stretch, &amp; Sinusoidal Floating (Gerak Mengambang Halus):</b> Objek <code>LontarSuci</code> dan <code>MinyakObor</code> bergerak mengambang naik-turun secara berirama menggunakan fungsi trigonometri <code>Mathf.Sin(Time.time * frequency) * amplitude</code> sehingga terlihat hidup dan menarik perhatian pemain.</li>
       <li><b>Anticipation &amp; Visual Feedback (Umpan Balik Cahaya):</b> Saat pemain menekan <code>Space</code> (<i>Holy Light Burst</i>), radius cahaya membesar secara cepat lalu kembali ke ukuran semula, disertai perubahan warna musuh yang terkena efek <i>Stun</i>.</li>
     </ol>
@@ -936,9 +940,9 @@
       </thead>
       <tbody>
         <tr>
-          <td><code>bgm_gender_girah.ogg</code></td>
+          <td><code>bgm_gamelan_girah.ogg</code></td>
           <td>BGM (Looping)</td>
-          <td>Alunan instrumen tradisional Bali <i>Gamelan Gender Wayang</i> dan <i>Suling Bambu</i> yang diputar berulang selama permainan berlangsung.</td>
+          <td>Rekaman otentik <i>Gend&eacute;r Wayang</i> (1928) dari ensambel <i>Gamelan Gender Wayang</i> Bali, berstatus <i>Public Domain</i> (Wikimedia Commons), diputar berulang selama permainan berlangsung.</td>
         </tr>
         <tr>
           <td><code>sfx_pickup_lontar.wav</code></td>
@@ -1086,7 +1090,7 @@
     <div class="page-break" id="gdd-bab7"></div>
     <h1 class="chapter-title">BAB VII<br>DAFTAR REFERENSI ASET (ASSET REFERENCES &amp; LISENSI)</h1>
     <p>
-      Sesuai ketentuan pengembangan prototipe permainan digital, seluruh aset visual, <i>tilemap</i>, ikon antarmuka, audio, dan sistem pencahayaan pihak ketiga yang digunakan memiliki lisensi terbuka (<i>Public Domain / CC0 / Royalty-Free</i>) dan didokumentasikan secara lengkap pada Tabel 7.1&ndash;7.6. Seluruh tautan repositori diperiksa pada 12 November 2026.
+      Sesuai ketentuan pengembangan prototipe permainan digital, seluruh aset visual, <i>tilemap</i>, ikon antarmuka, audio, dan sistem pencahayaan pihak ketiga yang digunakan memiliki lisensi terbuka (<i>Public Domain / CC0 / Royalty-Free</i>) dan didokumentasikan secara lengkap pada Tabel 7.1&ndash;7.6. Seluruh tautan repositori diperiksa pada 13 November 2026.
     </p>
 
     <h2 class="section-title" id="gdd-7-1">7.1 Standar Kepatuhan Lisensi Aset</h2>
@@ -1095,8 +1099,8 @@
     </p>
     <ol style="text-align: left;">
       <li><b>Creative Commons Zero (CC0 1.0 Universal / Public Domain Dedication):</b> mengizinkan aset digunakan, dimodifikasi, dan didistribusikan secara gratis untuk keperluan akademik maupun komersial. <a class="ref-link" href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">https://creativecommons.org/publicdomain/zero/1.0/</a></li>
-      <li><b>Pixabay Content License / Freesound CC0 (Royalty-Free Audio):</b> mengizinkan penggunaan BGM dan SFX secara gratis di dalam permainan dan video demonstrasi <i>gameplay</i>. <a class="ref-link" href="https://pixabay.com/service/license-summary/" target="_blank">https://pixabay.com/service/license-summary/</a></li>
-      <li><b>Unity Companion License (Built-in Official Packages):</b> lisensi resmi penggunaan paket internal Unity Engine seperti <i>Universal Render Pipeline 2D Lights</i> dan <i>TextMeshPro</i> pada lisensi <i>Unity Personal</i>. <a class="ref-link" href="https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest" target="_blank">Dokumentasi URP</a></li>
+      <li><b>Public Domain (Wikimedia Commons):</b> rekaman historis yang telah menjadi milik publik, bebas digunakan tanpa atribusi wajib, termasuk untuk BGM dan video demonstrasi <i>gameplay</i>. <a class="ref-link" href="https://commons.wikimedia.org/wiki/Commons:Licensing" target="_blank">https://commons.wikimedia.org/wiki/Commons:Licensing</a></li>
+      <li><b>Unity Companion License (Built-in Official Packages):</b> lisensi resmi penggunaan paket internal Unity Engine seperti <i>Universal Render Pipeline 2D Lights</i> pada lisensi <i>Unity Personal</i>. <a class="ref-link" href="https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest" target="_blank">Dokumentasi URP</a></li>
     </ol>
 
     <h2 class="section-title" id="gdd-7-2">7.2 Master Repositori Aset</h2>
@@ -1120,7 +1124,7 @@
           <td style="text-align: center;">1</td>
           <td><b>Ninja Adventure Asset Pack</b> (paket utama <i>all-in-one</i>)</td>
           <td>Pixel-Boy &amp; AAA</td>
-          <td>Karakter, monster/roh, lontar, <i>tilemap</i> desa, UI, BGM, dan SFX</td>
+          <td>Karakter, monster/roh, lontar, <i>tilemap</i> desa, UI, dan SFX</td>
           <td><b>CC0 1.0</b></td>
           <td>
             &bull; <b>Itch.io:</b> <a class="ref-link" href="https://pixel-boy.itch.io/ninja-adventure-asset-pack" target="_blank">buka</a><br>
@@ -1129,48 +1133,28 @@
         </tr>
         <tr>
           <td style="text-align: center;">2</td>
-          <td><b>Kenney Game Assets All-in-1</b> (<i>Tiny Town</i>, <i>Tiny Dungeon</i>, &amp; <i>UI Pack RPG</i>)</td>
-          <td>Kenney Vleugels (Kenney.nl)</td>
-          <td><i>Tilemap</i>, ikon lentera/obor, panel menu, dan tombol UI</td>
-          <td><b>CC0 1.0</b></td>
+          <td><b>Wikimedia Commons</b> &mdash; <i>Gend&eacute;r Wayang</i> (1928)</td>
+          <td>Gamelan Gender Wayang, Bali (rekaman 1928)</td>
+          <td>BGM gamelan Bali (loop)</td>
+          <td><b>Public Domain</b></td>
           <td>
-            &bull; <b>Katalog:</b> <a class="ref-link" href="https://kenney.nl/assets" target="_blank">buka</a><br>
-            &bull; <b>Tiny Town:</b> <a class="ref-link" href="https://kenney.nl/assets/tiny-town" target="_blank">buka</a><br>
-            &bull; <b>RPG UI:</b> <a class="ref-link" href="https://kenney.nl/assets/ui-pack-rpg-expansion" target="_blank">buka</a>
+            &bull; <b>Berkas:</b> <a class="ref-link" href="https://commons.wikimedia.org/wiki/File:Gend%C3%A9r_Wayang_(1928).ogg" target="_blank">buka</a><br>
+            &bull; <b>Lisensi:</b> <a class="ref-link" href="https://commons.wikimedia.org/wiki/Commons:Licensing" target="_blank">buka</a>
           </td>
         </tr>
         <tr>
           <td style="text-align: center;">3</td>
-          <td><b>Pixabay Royalty-Free Music</b> (gamelan &amp; suling bambu)</td>
-          <td>Komunitas musisi Pixabay</td>
-          <td>BGM gamelan dan suling bambu</td>
-          <td><b>Pixabay License</b> (free)</td>
+          <td><b>Aset Orisinal Lentera Dirah</b> (lingkungan Bali &amp; kostum Bahula)</td>
+          <td>Muhammad Sufyan (proyek ini)</td>
+          <td>Gapura, beringin, meru, bale kulkul, pelinggih, penjor, backdrop menu, restyle Bahula</td>
+          <td><b>CC0 1.0</b></td>
           <td>
-            &bull; <b>Gamelan:</b> <a class="ref-link" href="https://pixabay.com/music/search/gamelan/" target="_blank">buka</a><br>
-            &bull; <b>Suling:</b> <a class="ref-link" href="https://pixabay.com/music/search/bamboo%20flute/" target="_blank">buka</a>
+            &bull; <b>Generator:</b> <code>Game/Tools/generate_balinese_assets.py</code><br>
+            &bull; <b>Lisensi:</b> <code>Art/Environment/LICENSE_CC0.md</code>
           </td>
         </tr>
         <tr>
           <td style="text-align: center;">4</td>
-          <td><b>Freesound CC0 Traditional Chimes &amp; Gamelan</b></td>
-          <td>Komunitas Freesound</td>
-          <td>SFX genta suci, gong, dan api obor</td>
-          <td><b>CC0 / CC-BY</b></td>
-          <td>
-            &bull; <b>Freesound:</b> <a class="ref-link" href="https://freesound.org/search/?q=gamelan" target="_blank">buka</a><br>
-            &bull; <b>Pixabay SFX:</b> <a class="ref-link" href="https://pixabay.com/sound-effects/search/bell%20chime/" target="_blank">buka</a>
-          </td>
-        </tr>
-        <tr>
-          <td style="text-align: center;">5</td>
-          <td><b>OpenGameArt 2D Top-Down Collection</b></td>
-          <td>Komunitas OpenGameArt</td>
-          <td>Cadangan sprite obor, lontar, dan partikel cahaya</td>
-          <td><b>CC0 1.0</b></td>
-          <td><b>Portal:</b> <a class="ref-link" href="https://opengameart.org/" target="_blank">OpenGameArt</a></td>
-        </tr>
-        <tr>
-          <td style="text-align: center;">6</td>
           <td><b>Unity URP 2D Lights</b></td>
           <td>Unity Technologies</td>
           <td><code>Global Light 2D</code> dan <code>Point Light 2D</code></td>
@@ -1203,9 +1187,9 @@
       <tbody>
         <tr>
           <td><b>Karakter Pemain (Bahula)</b></td>
-          <td><code>Actor/Characters/Monk/SpriteSheet.png</code><br><i>(alternatif: <code>Villager/SpriteSheet.png</code>)</i></td>
-          <td><code>16 x 16 px</code> per frame (grid 4 arah)</td>
-          <td>Murid padepokan Mpu Bharada; digunakan pada komponen <code>SpriteRenderer</code> dan <code>Animator</code> untuk state <code>Idle</code> dan <code>Walking</code> 4 arah.</td>
+          <td><code>Actor/Characters/Monk/SeparateAnim/Walk.png</code><br><i>(disimpan sebagai <code>Art/Characters/Bahula_SpriteSheet.png</code>)</i></td>
+          <td><code>16 x 16 px</code> per frame (64&times;64, 4 arah &times; 4 frame)</td>
+          <td>Murid padepokan Mpu Bharada; sprite di-<i>restyle</i> menjadi pakaian/kamen putih, udeng coklat, dan sabuk emas; digunakan pada komponen <code>SpriteRenderer</code> dan <code>Animator</code> untuk state <code>Idle</code> dan <code>Walking</code> 4 arah.</td>
         </tr>
         <tr>
           <td><b>Potret Dialog Mpu Bharada &amp; Bahula</b></td>
@@ -1215,8 +1199,8 @@
         </tr>
         <tr>
           <td><b>NPC Musuh (Bayangan Wabah Desa Girah)</b></td>
-          <td><code>Actor/Monsters/Spirit/SpriteSheet.png</code><br><i>(alternatif: <code>Ghost/SpriteSheet.png</code>)</i></td>
-          <td><code>16 x 16 px</code> per frame</td>
+          <td><code>Actor/Monsters/Spirit/Spirit.png</code><br><i>(disimpan sebagai <code>Art/Monsters/ShadowSpirit_SpriteSheet.png</code>)</i></td>
+          <td><code>16 x 16 px</code> per frame (64&times;64)</td>
           <td><i>Color tint</i> ungu gelap (<code>#6B2D5C</code>) pada state <code>Patrol</code>/<code>Chase</code>, berubah biru sian transparan (<code>#64C8FF</code>) saat <code>Stunned</code> oleh Lentera Suci.</td>
         </tr>
       </tbody>
@@ -1236,17 +1220,17 @@
       <tbody>
         <tr>
           <td><b>3 Naskah Lontar Suci</b> (<i>Usada, Dharma, Rwa Bhineda</i>)</td>
-          <td><code>Items/Scroll/ScrollEmpty.png</code> atau <code>Items/Scroll/ScrollThunder.png</code></td>
+          <td><code>Items/Scroll/ScrollEmpty.png</code> (disimpan sebagai <code>Art/Items/Lontar.png</code>); varian <code>ScrollThunder.png</code> disimpan sebagai <code>Lontar_RwaBhineda.png</code></td>
           <td>Objek koleksi utama (<code>CollectibleItem.cs</code>), dilengkapi <code>Point Light 2D</code> kuning emas (<code>#FFB84D</code>) dan animasi mengambang sinusoidal (<code>Mathf.Sin</code>).</td>
         </tr>
         <tr>
           <td><b>Guci Minyak Obor</b> (<i>lantern oil refill</i>)</td>
-          <td><code>Items/Potion/MilkPot.png</code> atau <code>Items/Object/Lantern.png</code></td>
+          <td><code>Items/Potion/MilkPot.png</code> (disimpan sebagai <code>Art/Items/OilJar.png</code>)</td>
           <td>Menambah energi cahaya lentera sebesar <code>+35%</code> saat disentuh pemain (<code>OnTriggerEnter2D</code>).</td>
         </tr>
         <tr>
           <td><b>Altar Penyucian Desa Girah</b></td>
-          <td><code>Backgrounds/Tilesets/TilesetElement.png</code> (sprite altar batu/patung kuil)</td>
+          <td><code>Backgrounds/Tilesets/TilesetElement.png</code> &mdash; <i>tile</i> (7,2), sprite altar batu/patung kuil (disimpan sebagai <code>Art/Tilesets/TilesetElement.png</code>)</td>
           <td>Ditempatkan di pusat peta desa; saat <code>lontarCount == 3</code>, <code>Point Light 2D</code> menyala terang dan memicu kondisi <code>Victory</code>.</td>
         </tr>
       </tbody>
@@ -1273,12 +1257,27 @@
         </tr>
         <tr>
           <td><b>Layer 2: Obstacles / Walls</b> (<code>Sorting Order = 1</code>)</td>
-          <td><code>Backgrounds/Tilesets/TilesetNature.png</code> &amp; <code>TilesetHouse.png</code></td>
+          <td><code>Backgrounds/Tilesets/TilesetNature.png</code> (kanopi pepohonan; disimpan sebagai <code>Art/Tilesets/TilesetNature.png</code>)</td>
           <td><code>Tilemap&#8203;Collider2D</code> (solid wall)</td>
-          <td>Rumpun pohon bambu, pagar batu desa, dan rumah tradisional sebagai pembatas lorong labirin desa.</td>
+          <td>Rumpun pohon bambu/pepohonan dan pagar batu desa sebagai pembatas lorong labirin desa.</td>
         </tr>
       </tbody>
     </table>
+
+    <p>
+      <b>Aset lingkungan budaya Bali (orisinal, CC0 1.0).</b> Selain aset paket Ninja Adventure, prototipe ini memakai aset lingkungan yang digambar khusus melalui <code>Game/Tools/generate_balinese_assets.py</code> dan dilepas dengan lisensi CC0:
+    </p>
+    <ul>
+      <li><code>Gapura_CandiBentar.png</code> (96&times;80) dan <code>Gapura_Menu.png</code> (192&times;160) &mdash; gapura keluar desa, gerbang sektor utara, serta latar panel Main Menu.</li>
+      <li><code>PohonBeringin_Besar.png</code> (64&times;80) dan <code>PohonBeringin_Kecil.png</code> (40&times;56) &mdash; pohon beringin berakar gantung di alun-alun dan sektor desa.</li>
+      <li><code>PuraMeru.png</code> (48&times;96) &mdash; pura meru bertingkat di sektor barat dan timur.</li>
+      <li><code>BaleKulkul.png</code> (48&times;48) &mdash; bale kulkul di alun-alun dan sektor utara.</li>
+      <li><code>Pelinggih.png</code> (24&times;32) &mdash; pelinggih di empat sudut alun-alun.</li>
+      <li><code>Penjor.png</code> (16&times;64) &mdash; penjor bambu berhias di tepi alun-alun.</li>
+    </ul>
+    <p>
+      Peta final memakai 2 gapura, 7 pohon beringin, 2 pura meru, 2 bale kulkul, 4 pelinggih, dan 6 penjor. Collider hanya dipasang pada bagian solid (tiang, batang, dasar bangunan) sehingga seluruh koridor tetap dapat dilewati.
+    </p>
 
     <h2 class="section-title" id="gdd-7-4">7.4 Aset UI/HUD dan Audio</h2>
     <p>
@@ -1300,13 +1299,13 @@
         </tr>
         <tr>
           <td><b>Bingkai Panel Dialog &amp; HUD</b></td>
-          <td><code>HUD/Dialog/DialogBoxSimple.png</code> &amp; <code>HUD/NinePathRect/</code></td>
+          <td><code>HUD/NinePathRect/FacesetBox.png</code> (bingkai dialog) &amp; <code>HUD/NinePathRect/DialogueBubble.png</code> (tombol)</td>
           <td>Latar kotak dialog Mpu Bharada, layar <i>Main Menu</i>, <i>Victory</i>, dan <i>Game Over</i>.</td>
         </tr>
         <tr>
-          <td><b>Font Pixel Tradisional</b></td>
-          <td><code>HUD/Font/NormalFont.ttf</code></td>
-          <td>Diimpor ke <code>TextMeshPro Font Asset</code> untuk keterbacaan (<i>clarity</i>) dan konsistensi visual.</td>
+          <td><b>Font UI</b></td>
+          <td><code>HUD/Font/NormalFont.ttf</code> (diarsipkan); UI memakai font bawaan Unity (<code>LegacyRuntime.ttf</code>)</td>
+          <td>Komponen uGUI <code>Text</code> memakai font bawaan Unity karena metrik <i>glyph</i> <code>NormalFont.ttf</code> tidak konsisten (spasi dan lebar huruf), sehingga keterbacaan (<i>clarity</i>) lebih terjaga.</td>
         </tr>
       </tbody>
     </table>
@@ -1323,7 +1322,7 @@
       <tbody>
         <tr>
           <td><b>BGM Latar Malam Desa Girah</b></td>
-          <td>Pixabay MP3 <i>atau</i> <code>Musics/2 - The Cave.ogg</code></td>
+          <td><code>Wikimedia Commons</code> &mdash; <i>Gend&eacute;r Wayang</i> (1928), <i>Public Domain</i> (disimpan sebagai <code>Audio/BGM/bgm_gamelan_girah.ogg</code>)</td>
           <td>Diputar berulang sejak permainan dimulai.</td>
         </tr>
         <tr>
@@ -1355,7 +1354,7 @@
       <li><b>Point Light 2D (Lentera Suci Bahula):</b> dipasang sebagai <i>child object</i> pada karakter pemain dengan warna hangat <code>#FFB84D</code> (<i>Sacred Lantern Gold</i>), <code>Intensity = 1.4</code>, dan <code>Outer Radius</code> dinamis antara <code>6.0 unit</code> (energi 100%) hingga <code>1.8 unit</code>.</li>
     </ol>
 
-    <h1 class="chapter-title" id="gdd-bab8" style="margin-top: 22pt;">BAB VIII<br>STRUKTUR PROJECT UNITY &amp; PETA JALAN PENGEMBANGAN UAS</h1>
+    <h1 class="chapter-title" id="gdd-bab8" style="margin-top: 22pt;">BAB VIII<br>STRUKTUR PROJECT UNITY &amp; PETA JALAN PENGEMBANGAN FASE BERIKUTNYA</h1>
 
     <h2 class="section-title">8.1 Organisasi Struktur Folder Project di Unity</h2>
     <p>
@@ -1366,16 +1365,17 @@
       <li><code>Assets/_Project/Scripts/Player/</code> &mdash; Berisi <code>PlayerController.cs</code> (Input, Movement, Lantern Light Decay, &amp; Stun Burst).</li>
       <li><code>Assets/_Project/Scripts/Enemies/</code> &mdash; Berisi <code>EnemyShadowAI.cs</code> (FSM Patrol, Chase, &amp; Stunned).</li>
       <li><code>Assets/_Project/Scripts/Interactables/</code> &mdash; Berisi <code>CollectibleItem.cs</code> (Lontar &amp; Minyak Obor) dan <code>AltarPurification.cs</code>.</li>
-      <li><code>Assets/_Project/Art/</code>, <code>Assets/_Project/Audio/</code>, dan <code>Assets/_Project/Scenes/</code> &mdash; Menyimpan sprite, tilemap, audio, dan scene utama.</li>
+      <li><code>Assets/_Project/Art/</code> (<i>Characters</i>, <i>Monsters</i>, <i>Items</i>, <i>Tilesets</i>, <i>Environment</i>, <i>UI</i>, <i>Animations</i>, <i>Materials</i>), <code>Assets/_Project/Audio/</code> (<i>BGM</i>, <i>SFX</i>), dan <code>Assets/_Project/Scenes/</code> &mdash; Menyimpan sprite, tilemap, audio, dan scene utama.</li>
+      <li><code>Assets/_Project/Scripts/Editor/</code> &mdash; Berisi <code>LenteraDirahSceneBuilder.cs</code>, <code>ProjectConfigurator.cs</code>, <code>PlayModeSmokeTest.cs</code>, dan <code>PlayModePreviewCapture.cs</code> (otomasi konfigurasi aset, perakitan scene, build macOS, serta pengujian).</li>
     </ul>
 
-    <h2 class="section-title">8.2 Peta Jalan Ekspansi Menuju Proyek Akhir (UAS)</h2>
+    <h2 class="section-title">8.2 Peta Jalan Ekspansi Menuju Fase Berikutnya</h2>
     <p>
-      Prototipe Tugas 1 ini dirancang agar dapat langsung dikembangkan menjadi Proyek Akhir (UAS) tanpa membangun ulang dari awal, melalui tahapan ekspansi berikut:
+      Prototipe ini dirancang agar dapat langsung dikembangkan ke fase berikutnya tanpa membangun ulang dari awal, melalui tahapan ekspansi berikut:
     </p>
     <ol>
-      <li><b>Penambahan 3 Level Berbeda dengan <i>Progressive Difficulty Curve</i>:</b> Level 1 (<i>Desa Girah Bagian Luar</i> &mdash; Prototipe Tugas 1), Level 2 (<i>Hutan Bambu Lemah Tulis</i>), dan Level 3 (<i>Pelataran Setra Gandamayu</i>).</li>
-      <li><b>Implementasi Fitur Wajib UAS:</b> Penambahan sistem penyimpanan progres (<i>Save System</i> berbasis JSON/<code>PlayerPrefs</code>), menu pengaturan (<i>Settings Menu</i> untuk volume BGM/SFX), serta layar kredit (<i>Credit Screen</i>).</li>
+      <li><b>Penambahan 3 Level Berbeda dengan <i>Progressive Difficulty Curve</i>:</b> Level 1 (<i>Desa Girah Bagian Luar</i> &mdash; prototipe saat ini), Level 2 (<i>Hutan Bambu Lemah Tulis</i>), dan Level 3 (<i>Pelataran Setra Gandamayu</i>).</li>
+      <li><b>Implementasi Fitur Lanjutan:</b> Penambahan sistem penyimpanan progres (<i>Save System</i> berbasis JSON/<code>PlayerPrefs</code>), menu pengaturan (<i>Settings Menu</i> untuk volume BGM/SFX), serta layar kredit (<i>Credit Screen</i>).</li>
       <li><b>Ekspor Lintas Platform:</b> Menambahkan opsi kontrol <i>Virtual Joystick</i> pada Canvas UI untuk mendukung build PC (Windows/macOS) sekaligus Mobile (Android <code>.apk</code>).</li>
     </ol>
 

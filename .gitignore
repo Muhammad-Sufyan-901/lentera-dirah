@@ -35,3 +35,7 @@ Game/.vscode/
 
 # --- local agent/tool config ---
 .commandcode/
+
+# --- Python caches ---
+__pycache__/
+*.pyc
