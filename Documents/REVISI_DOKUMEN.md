@@ -100,3 +100,16 @@ Bagian tersebut **tidak diubah** karena di luar ruang lingkup BAB VIII; dapat di
 
 Verifikasi: DOCX dan HTML tidak lagi memuat “UAS”/“Tugas 1” di BAB VIII (hanya tersisa satu penyebutan di §1.1);
 PDF diregenerasi (16 halaman) dan halaman BAB VIII diperiksa secara visual.
+
+---
+
+## Revisi lanjutan — tombol Main Menu (13 November 2026)
+
+Permintaan: sinkronkan GDD dengan fitur **KELUAR** dan **CARA BERMAIN** yang baru ditambahkan.
+
+| Lokasi | Sebelum | Sesudah |
+|---|---|---|
+| §6.2 diagram (node Main Menu) | `Klik tombol “Mulai Penyucian”` | `Pilih “Mulai Penyucian”, “Cara Bermain”, atau “Keluar”` |
+| §6.2 (paragraf baru) | — | Penjelasan tiga tombol: MULAI PENYUCIAN, CARA BERMAIN (panel panduan, ditutup **KEMBALI**/`Esc`), dan KELUAR (menutup aplikasi) |
+
+Verifikasi: DOCX (termasuk diagram bertingkat) dan HTML diperbarui; PDF diregenerasi (16 halaman) dan halaman Bab VI diperiksa visual.
