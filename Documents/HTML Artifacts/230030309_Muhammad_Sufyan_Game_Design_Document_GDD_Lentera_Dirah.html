@@ -538,7 +538,7 @@
       <tr><td class="toc-sub"><a href="#gdd-7-3">7.3 Pemetaan Aset Visual 2D (Karakter, Artefak, dan Environment)</a></td></tr>
       <tr><td class="toc-sub"><a href="#gdd-7-4">7.4 Aset UI/HUD dan Audio</a></td></tr>
       <tr><td class="toc-sub"><a href="#gdd-7-5">7.5 Pencahayaan Dinamis (Unity URP 2D Lights)</a></td></tr>
-      <tr><td class="toc-chapter"><a href="#gdd-bab8">8. BAB VIII: STRUKTUR PROJECT UNITY &amp; PETA JALAN PENGEMBANGAN UAS</a></td></tr>
+      <tr><td class="toc-chapter"><a href="#gdd-bab8">8. BAB VIII: STRUKTUR PROJECT UNITY &amp; PETA JALAN PENGEMBANGAN FASE BERIKUTNYA</a></td></tr>
     </table>
 
     <!-- ==================== BAB I: GAME OVERVIEW ==================== -->
@@ -1354,7 +1354,7 @@
       <li><b>Point Light 2D (Lentera Suci Bahula):</b> dipasang sebagai <i>child object</i> pada karakter pemain dengan warna hangat <code>#FFB84D</code> (<i>Sacred Lantern Gold</i>), <code>Intensity = 1.4</code>, dan <code>Outer Radius</code> dinamis antara <code>6.0 unit</code> (energi 100%) hingga <code>1.8 unit</code>.</li>
     </ol>
 
-    <h1 class="chapter-title" id="gdd-bab8" style="margin-top: 22pt;">BAB VIII<br>STRUKTUR PROJECT UNITY &amp; PETA JALAN PENGEMBANGAN UAS</h1>
+    <h1 class="chapter-title" id="gdd-bab8" style="margin-top: 22pt;">BAB VIII<br>STRUKTUR PROJECT UNITY &amp; PETA JALAN PENGEMBANGAN FASE BERIKUTNYA</h1>
 
     <h2 class="section-title">8.1 Organisasi Struktur Folder Project di Unity</h2>
     <p>
@@ -1369,13 +1369,13 @@
       <li><code>Assets/_Project/Scripts/Editor/</code> &mdash; Berisi <code>LenteraDirahSceneBuilder.cs</code>, <code>ProjectConfigurator.cs</code>, <code>PlayModeSmokeTest.cs</code>, dan <code>PlayModePreviewCapture.cs</code> (otomasi konfigurasi aset, perakitan scene, build macOS, serta pengujian).</li>
     </ul>
 
-    <h2 class="section-title">8.2 Peta Jalan Ekspansi Menuju Proyek Akhir (UAS)</h2>
+    <h2 class="section-title">8.2 Peta Jalan Ekspansi Menuju Fase Berikutnya</h2>
     <p>
-      Prototipe Tugas 1 ini dirancang agar dapat langsung dikembangkan menjadi Proyek Akhir (UAS) tanpa membangun ulang dari awal, melalui tahapan ekspansi berikut:
+      Prototipe ini dirancang agar dapat langsung dikembangkan ke fase berikutnya tanpa membangun ulang dari awal, melalui tahapan ekspansi berikut:
     </p>
     <ol>
-      <li><b>Penambahan 3 Level Berbeda dengan <i>Progressive Difficulty Curve</i>:</b> Level 1 (<i>Desa Girah Bagian Luar</i> &mdash; Prototipe Tugas 1), Level 2 (<i>Hutan Bambu Lemah Tulis</i>), dan Level 3 (<i>Pelataran Setra Gandamayu</i>).</li>
-      <li><b>Implementasi Fitur Wajib UAS:</b> Penambahan sistem penyimpanan progres (<i>Save System</i> berbasis JSON/<code>PlayerPrefs</code>), menu pengaturan (<i>Settings Menu</i> untuk volume BGM/SFX), serta layar kredit (<i>Credit Screen</i>).</li>
+      <li><b>Penambahan 3 Level Berbeda dengan <i>Progressive Difficulty Curve</i>:</b> Level 1 (<i>Desa Girah Bagian Luar</i> &mdash; prototipe saat ini), Level 2 (<i>Hutan Bambu Lemah Tulis</i>), dan Level 3 (<i>Pelataran Setra Gandamayu</i>).</li>
+      <li><b>Implementasi Fitur Lanjutan:</b> Penambahan sistem penyimpanan progres (<i>Save System</i> berbasis JSON/<code>PlayerPrefs</code>), menu pengaturan (<i>Settings Menu</i> untuk volume BGM/SFX), serta layar kredit (<i>Credit Screen</i>).</li>
       <li><b>Ekspor Lintas Platform:</b> Menambahkan opsi kontrol <i>Virtual Joystick</i> pada Canvas UI untuk mendukung build PC (Windows/macOS) sekaligus Mobile (Android <code>.apk</code>).</li>
     </ol>
 

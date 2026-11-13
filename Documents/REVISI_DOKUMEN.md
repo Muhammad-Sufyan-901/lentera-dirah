@@ -79,3 +79,24 @@ Skrip perubahan disimpan agar dapat diaudit/diulang:
 - `Documents/tools/update_assets_doc.py`
 
 Skrip bersifat sekali-jalan terhadap dokumen asli (mengandalkan teks lama sebagai anchor), sehingga untuk regenerasi gunakan dokumen versi sebelum revisi.
+
+---
+
+## Revisi lanjutan — BAB VIII (13 November 2026)
+
+Permintaan: hilangkan unsur pengembangan UAS pada BAB VIII dan ganti menjadi pengembangan fase berikutnya.
+
+| Lokasi | Sebelum | Sesudah |
+|---|---|---|
+| Judul bab (daftar isi + heading) | `… PETA JALAN PENGEMBANGAN UAS` | `… PETA JALAN PENGEMBANGAN FASE BERIKUTNYA` |
+| §8.2 heading | `Peta Jalan Ekspansi Menuju Proyek Akhir (UAS)` | `Peta Jalan Ekspansi Menuju Fase Berikutnya` |
+| §8.2 narasi | `Prototipe Tugas 1 ini dirancang agar dapat langsung dikembangkan menjadi Proyek Akhir (UAS) …` | `Prototipe ini dirancang agar dapat langsung dikembangkan ke fase berikutnya …` |
+| Daftar 1 | `Level 1 (Desa Girah Bagian Luar — Prototipe Tugas 1)` | `Level 1 (Desa Girah Bagian Luar — prototipe saat ini)` |
+| Daftar 2 | `Implementasi Fitur Wajib UAS:` | `Implementasi Fitur Lanjutan:` |
+| Daftar 3 | — | tidak diubah (tidak mengandung unsur UAS) |
+
+Catatan: §1.1 masih menyebut “Proyek Akhir (UAS)” pada keterangan ekspansi Android.
+Bagian tersebut **tidak diubah** karena di luar ruang lingkup BAB VIII; dapat disesuaikan bila diinginkan.
+
+Verifikasi: DOCX dan HTML tidak lagi memuat “UAS”/“Tugas 1” di BAB VIII (hanya tersisa satu penyebutan di §1.1);
+PDF diregenerasi (16 halaman) dan halaman BAB VIII diperiksa secara visual.
