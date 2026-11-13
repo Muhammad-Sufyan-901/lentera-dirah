@@ -77,6 +77,27 @@ namespace LenteraDirah.Editor
                     }
 
                     SaveRenderTarget("preview_menu.png");
+
+                    if (TryInvoke("HowToPlayButton"))
+                    {
+                        state = 5;
+                        frames = 0;
+                        return;
+                    }
+
+                    GameManager.Instance.StartPurification();
+                    state = 2;
+                    frames = 0;
+                    break;
+
+                case 5:
+                    if (frames < 4)
+                    {
+                        return;
+                    }
+
+                    SaveRenderTarget("preview_howto.png");
+                    TryInvoke("HowToPlayCloseButton");
                     GameManager.Instance.StartPurification();
                     state = 2;
                     frames = 0;
@@ -147,6 +168,26 @@ namespace LenteraDirah.Editor
             renderTexture.Create();
             sceneCamera.targetTexture = renderTexture;
 
+            return true;
+        }
+
+        private static bool TryInvoke(string objectName)
+        {
+            GameObject target = GameObject.Find(objectName);
+
+            if (target == null)
+            {
+                return false;
+            }
+
+            Button button = target.GetComponent<Button>();
+
+            if (button == null)
+            {
+                return false;
+            }
+
+            button.onClick.Invoke();
             return true;
         }
 

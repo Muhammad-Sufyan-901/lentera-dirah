@@ -11,6 +11,7 @@ namespace LenteraDirah
 
         [Header("Panel")]
         [SerializeField] private GameObject mainMenuPanel;
+        [SerializeField] private GameObject howToPlayPanel;
         [SerializeField] private GameObject dialogPanel;
         [SerializeField] private GameObject hudPanel;
         [SerializeField] private GameObject victoryPanel;
@@ -30,7 +31,9 @@ namespace LenteraDirah
 
         [Header("Tombol")]
         [SerializeField] private Button startButton;
+        [SerializeField] private Button howToPlayButton;
         [SerializeField] private Button quitButton;
+        [SerializeField] private Button howToPlayCloseButton;
         [SerializeField] private Button dialogButton;
         [SerializeField] private Button victoryButton;
         [SerializeField] private Button gameOverButton;
@@ -47,6 +50,16 @@ namespace LenteraDirah
             if (quitButton != null)
             {
                 quitButton.onClick.AddListener(OnQuitClicked);
+            }
+
+            if (howToPlayButton != null)
+            {
+                howToPlayButton.onClick.AddListener(ShowHowToPlay);
+            }
+
+            if (howToPlayCloseButton != null)
+            {
+                howToPlayCloseButton.onClick.AddListener(HideHowToPlay);
             }
 
             if (dialogButton != null)
@@ -129,8 +142,37 @@ namespace LenteraDirah
 #endif
         }
 
+        public void ShowHowToPlay()
+        {
+            if (howToPlayPanel != null)
+            {
+                howToPlayPanel.SetActive(true);
+            }
+        }
+
+        public void HideHowToPlay()
+        {
+            if (howToPlayPanel != null)
+            {
+                howToPlayPanel.SetActive(false);
+            }
+        }
+
+        private void Update()
+        {
+            if (howToPlayPanel != null && howToPlayPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+            {
+                HideHowToPlay();
+            }
+        }
+
         private void HandleStateChanged(GameState state)
         {
+            if (howToPlayPanel != null && howToPlayPanel.activeSelf && state != GameState.MainMenu)
+            {
+                HideHowToPlay();
+            }
+
             SetActive(mainMenuPanel, state == GameState.MainMenu);
             SetActive(dialogPanel, state == GameState.IntroDialog);
             SetActive(hudPanel, state == GameState.Playing);

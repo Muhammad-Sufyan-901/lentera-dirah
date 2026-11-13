@@ -49,6 +49,7 @@ namespace LenteraDirah.Editor
         private sealed class UiRefs
         {
             public GameObject MainMenu;
+            public GameObject HowToPlay;
             public GameObject Dialog;
             public GameObject Hud;
             public GameObject Victory;
@@ -57,6 +58,8 @@ namespace LenteraDirah.Editor
             public Text VictoryText;
             public Text GameOverText;
             public Button StartButton;
+            public Button HowToPlayButton;
+            public Button HowToPlayCloseButton;
             public Button QuitButton;
             public Button DialogButton;
             public Button VictoryButton;
@@ -133,6 +136,7 @@ namespace LenteraDirah.Editor
             BindAudio(audioManager);
 
             Bind(uiManager, "mainMenuPanel", uiRefs.MainMenu);
+            Bind(uiManager, "howToPlayPanel", uiRefs.HowToPlay);
             Bind(uiManager, "dialogPanel", uiRefs.Dialog);
             Bind(uiManager, "hudPanel", uiRefs.Hud);
             Bind(uiManager, "victoryPanel", uiRefs.Victory);
@@ -147,6 +151,8 @@ namespace LenteraDirah.Editor
             Bind(uiManager, "victoryText", uiRefs.VictoryText);
             Bind(uiManager, "gameOverText", uiRefs.GameOverText);
             Bind(uiManager, "startButton", uiRefs.StartButton);
+            Bind(uiManager, "howToPlayButton", uiRefs.HowToPlayButton);
+            Bind(uiManager, "howToPlayCloseButton", uiRefs.HowToPlayCloseButton);
             Bind(uiManager, "quitButton", uiRefs.QuitButton);
             Bind(uiManager, "dialogButton", uiRefs.DialogButton);
             Bind(uiManager, "victoryButton", uiRefs.VictoryButton);
@@ -773,9 +779,13 @@ namespace LenteraDirah.Editor
             refs.HintText = hud.HintText;
             refs.Hearts = hud.Hearts;
 
-            refs.MainMenu = CreateMainMenu(canvas.transform, panelSprite, dialogSprite, out Button startButton, out Button quitButton);
+            refs.MainMenu = CreateMainMenu(canvas.transform, panelSprite, dialogSprite, out Button startButton, out Button howToPlayButton, out Button quitButton);
             refs.StartButton = startButton;
+            refs.HowToPlayButton = howToPlayButton;
             refs.QuitButton = quitButton;
+
+            refs.HowToPlay = CreateHowToPlay(canvas.transform, panelSprite, dialogSprite, out Button howToPlayCloseButton);
+            refs.HowToPlayCloseButton = howToPlayCloseButton;
 
             refs.Dialog = CreateDialog(canvas.transform, panelSprite, dialogSprite, mpuPortrait, out Text dialogText, out Button dialogButton);
             refs.DialogText = dialogText;
@@ -795,6 +805,7 @@ namespace LenteraDirah.Editor
             refs.Victory.SetActive(false);
             refs.GameOver.SetActive(false);
             refs.Hud.SetActive(false);
+            refs.HowToPlay.SetActive(false);
 
             return refs;
         }
@@ -855,7 +866,7 @@ namespace LenteraDirah.Editor
         }
 
         private static GameObject CreateMainMenu(Transform canvas, Sprite panelSprite, Sprite buttonSprite,
-            out Button startButton, out Button quitButton)
+            out Button startButton, out Button howToPlayButton, out Button quitButton)
         {
             GameObject panel = CreateOverlay(canvas, "MainMenu_Panel", new Color(Midnight.r, Midnight.g, Midnight.b, 0.94f));
 
@@ -923,7 +934,50 @@ namespace LenteraDirah.Editor
             AddText(footnote, "Rwa Bhineda — terang dan gelap saling menyeimbangkan", 20, new Color(0.64f, 0.784f, 1f), TextAnchor.MiddleCenter);
 
             startButton = CreateButton(box, "StartButton", "MULAI PENYUCIAN", buttonSprite, new Vector2(0f, -110f), new Vector2(480f, 84f));
-            quitButton = CreateButton(box, "QuitButton", "KELUAR", buttonSprite, new Vector2(0f, -206f), new Vector2(300f, 62f));
+            howToPlayButton = CreateButton(box, "HowToPlayButton", "CARA BERMAIN", buttonSprite, new Vector2(-168f, -206f), new Vector2(320f, 62f));
+            quitButton = CreateButton(box, "QuitButton", "KELUAR", buttonSprite, new Vector2(170f, -206f), new Vector2(300f, 62f));
+
+            return panel;
+        }
+
+        private static GameObject CreateHowToPlay(Transform canvas, Sprite panelSprite, Sprite buttonSprite, out Button closeButton)
+        {
+            GameObject panel = CreateOverlay(canvas, "HowToPlay_Panel", new Color(0.02f, 0.02f, 0.04f, 0.93f));
+
+            RectTransform box = Place(NewRect("HowToPlayBox", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(1100f, 800f));
+            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.985f), true);
+
+            RectTransform title = Place(NewRect("HowToPlayTitle", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 332f), new Vector2(900f, 80f));
+            AddText(title, "CARA BERMAIN", 52, Gold, TextAnchor.MiddleCenter);
+
+            AddImage(Place(NewRect("HowToPlayOrnament", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, 284f), new Vector2(820f, 2f)),
+                null, new Color(Gold.r, Gold.g, Gold.b, 0.55f), false);
+
+            RectTransform body = Place(NewRect("HowToPlayBody", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -8f), new Vector2(940f, 560f));
+            Text bodyText = AddText(body,
+                "<b>TUJUAN</b>\n" +
+                "Kumpulkan 3 Lontar Suci (Usada, Dharma, Rwa Bhineda) di sektor utara, barat, dan timur desa, " +
+                "lalu sentuh Altar Penyucian di tengah desa.\n\n" +
+                "<b>KONTROL</b>\n" +
+                "[WASD / Panah]  Bergerak 4 arah\n" +
+                "[SPACE]  Holy Light Burst — membekukan Bayangan Wabah di sekitar selama 3 detik\n" +
+                "[E] atau klik tombol  — melanjutkan dialog\n\n" +
+                "<b>ENERGI LENTERA</b>\n" +
+                "Energi menyusut 2% per detik dan radius cahaya ikut mengecil. Ambil Minyak Obor untuk menambah " +
+                "+35% energi. Bila energi habis, permainan berakhir.\n\n" +
+                "<b>BAYANGAN WABAH</b>\n" +
+                "Hindari patrolinya. Burst memakai 15% energi (cooldown 4 detik, radius 3.5 unit). Tersentuh musuh " +
+                "mengurangi 1 nyawa; kamu kebal 1 detik setelahnya.\n\n" +
+                "<b>TIPS</b>\n" +
+                "Amati pola patroli sebelum mengambil Lontar, dan simpan energi untuk situasi terjepit.",
+                20, new Color(0.92f, 0.9f, 0.86f), TextAnchor.UpperLeft);
+            bodyText.lineSpacing = 1.15f;
+
+            closeButton = CreateButton(box, "HowToPlayCloseButton", "KEMBALI", buttonSprite, new Vector2(0f, -336f), new Vector2(300f, 62f));
 
             return panel;
         }
