@@ -30,6 +30,7 @@ namespace LenteraDirah
 
         [Header("Tombol")]
         [SerializeField] private Button startButton;
+        [SerializeField] private Button quitButton;
         [SerializeField] private Button dialogButton;
         [SerializeField] private Button victoryButton;
         [SerializeField] private Button gameOverButton;
@@ -41,6 +42,11 @@ namespace LenteraDirah
             if (startButton != null)
             {
                 startButton.onClick.AddListener(OnStartClicked);
+            }
+
+            if (quitButton != null)
+            {
+                quitButton.onClick.AddListener(OnQuitClicked);
             }
 
             if (dialogButton != null)
@@ -112,6 +118,15 @@ namespace LenteraDirah
             {
                 GameManager.Instance.RestartScene();
             }
+        }
+
+        private void OnQuitClicked()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
 
         private void HandleStateChanged(GameState state)

@@ -24,6 +24,8 @@ Seluruh source code & executable ada di folder **`Game/`**.
 → sentuh **Altar Penyucian** setelah 3 Lontar → `Victory` (Desa Girah Pulih)
 atau nyawa habis / energi 0% → `Game Over` → **COBA LAGI**.
 
+Dari Main Menu, tombol **KELUAR** menutup game (di Unity Editor, tombol ini menghentikan Play Mode).
+
 ---
 
 ## 2. Kontrol
@@ -33,6 +35,7 @@ atau nyawa habis / energi 0% → `Game Over` → **COBA LAGI**.
 | Bergerak 4 arah | `W A S D` atau panah |
 | Holy Light Burst (stun 3 dtk) | `SPACE` |
 | Lanjut dialog | `E` atau klik tombol |
+| Keluar dari game | Tombol **KELUAR** di Main Menu |
 
 Parameter (sesuai GDD): kecepatan **4.5**, decay lentera **2%/dtk**, radius cahaya **6.0 → 1.8**, burst **-15%** energi, cooldown **4 dtk**, radius stun **3.5**, nyawa **3**, invulnerability **1 dtk**, patroli **2.2**, kejar **3.4**, deteksi **4.0**, lepas **5.5**.
 
