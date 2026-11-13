@@ -129,7 +129,9 @@ Game/
 
 ## 8. Kredit Aset
 
-- **Ninja Adventure Asset Pack** — Pixel-Boy & AAA, **CC0 1.0** (sprite karakter, monster, item, tileset, UI, font, SFX, BGM). Lisensi lengkap: `Assets/_Project/LICENSE_NinjaAdventure_CC0.txt`.
+- **Ninja Adventure Asset Pack** — Pixel-Boy & AAA, **CC0 1.0** (sprite karakter, monster, item, tileset, UI, font, SFX). Lisensi lengkap: `Assets/_Project/LICENSE_NinjaAdventure_CC0.txt`.
+- **BGM Gamelan Gender Wayang** — rekaman *Gendér Wayang* (1928), **Public Domain**, Wikimedia Commons; rincian di `Assets/_Project/Audio/BGM/LICENSE_BGM.md`.
+- **Karakter Bahula** — restyle CC0 dari sprite Monk (baju putih + udeng coklat + sabuk emas) via `Game/Tools/restyle_bahula_balinese.py`; catatan di `Assets/_Project/Art/Characters/LICENSE_Bahula_Restyle.md`.
 - **Universal Render Pipeline 2D Lights** — Unity Technologies (Unity Companion License).
 
 ---
