@@ -55,6 +55,29 @@ namespace LenteraDirah
         private bool isInvulnerable;
         private string currentAnimation;
 
+#if UNITY_EDITOR
+        private Vector2 scriptedInput;
+        private bool useScriptedInput;
+        private bool recordingInvulnerable;
+
+        public void SetScriptedInput(Vector2 input)
+        {
+            scriptedInput = input;
+            useScriptedInput = true;
+        }
+
+        public void ClearScriptedInput()
+        {
+            useScriptedInput = false;
+            scriptedInput = Vector2.zero;
+        }
+
+        public void SetRecordingInvulnerable(bool value)
+        {
+            recordingInvulnerable = value;
+        }
+#endif
+
         private void Awake()
         {
             body = GetComponent<Rigidbody2D>();
@@ -121,7 +144,13 @@ namespace LenteraDirah
 
         private void ReadInput()
         {
+#if UNITY_EDITOR
+            Vector2 raw = useScriptedInput
+                ? scriptedInput
+                : new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+#else
             Vector2 raw = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+#endif
 
             if (raw.sqrMagnitude > 0.01f)
             {
@@ -238,6 +267,13 @@ namespace LenteraDirah
 
         public void TakeDamage(int amount = 1)
         {
+#if UNITY_EDITOR
+            if (recordingInvulnerable)
+            {
+                return;
+            }
+#endif
+
             if (isInvulnerable || State == PlayerState.Hurt)
             {
                 return;

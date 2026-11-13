@@ -39,3 +39,10 @@ Game/.vscode/
 # --- Python caches ---
 __pycache__/
 *.pyc
+
+# --- gameplay recordings (local artifacts) ---
+Gameplay Record/*.mp4
+Gameplay Record/frames_*/
+
+# --- distribusi (zip besar, jangan di-commit) ---
+/*.zip
