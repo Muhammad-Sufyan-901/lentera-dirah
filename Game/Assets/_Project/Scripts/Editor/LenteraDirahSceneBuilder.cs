@@ -89,6 +89,12 @@ namespace LenteraDirah.Editor
             BuildMacApp();
         }
 
+        [MenuItem("Tools/Lentera Dirah/3. Build Windows EXE", priority = 3)]
+        public static void BuildWindowsMenu()
+        {
+            BuildWindowsApp();
+        }
+
         [MenuItem("Tools/Lentera Dirah/Run Full Setup (1 then 2)", priority = 4)]
         public static void RunFullSetup()
         {
@@ -1293,6 +1299,38 @@ namespace LenteraDirah.Editor
             else
             {
                 Debug.LogError($"[LenteraDirah] Build macOS gagal: {report.summary.result}. Cek Build Settings atau lisensi Unity.");
+            }
+        }
+
+        public static void BuildWindowsApp()
+        {
+            if (!File.Exists(ProjectConfigurator.ScenePath))
+            {
+                BuildPrototypeScene();
+            }
+
+            UnityEditor.WindowsStandalone.UserBuildSettings.architecture = UnityEditor.Build.OSArchitecture.x64;
+
+            string buildDirectory = Path.GetFullPath(Path.Combine(Application.dataPath, "../Builds/Windows"));
+            Directory.CreateDirectory(buildDirectory);
+
+            BuildPlayerOptions options = new BuildPlayerOptions
+            {
+                scenes = new[] { ProjectConfigurator.ScenePath },
+                locationPathName = Path.Combine(buildDirectory, "LenteraDirah.exe"),
+                target = BuildTarget.StandaloneWindows64,
+                options = BuildOptions.None
+            };
+
+            BuildReport report = BuildPipeline.BuildPlayer(options);
+
+            if (report.summary.result == BuildResult.Succeeded)
+            {
+                Debug.Log($"[LenteraDirah] Build Windows berhasil: {options.locationPathName} ({report.summary.totalSize / (1024 * 1024)} MB)");
+            }
+            else
+            {
+                Debug.LogError($"[LenteraDirah] Build Windows gagal: {report.summary.result}. Pastikan modul 'Windows Build Support (Mono)' terpasang.");
             }
         }
     }
