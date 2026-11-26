@@ -13,6 +13,9 @@ namespace LenteraDirah
             Victory
         }
 
+        public const string BgmPrefsKey = "ld_bgm_volume";
+        public const string SfxPrefsKey = "ld_sfx_volume";
+
         public static AudioManager Instance { get; private set; }
 
         [Header("Audio Clip")]
@@ -40,6 +43,9 @@ namespace LenteraDirah
 
             Instance = this;
 
+            bgmVolume = PlayerPrefs.GetFloat(BgmPrefsKey, bgmVolume);
+            sfxVolume = PlayerPrefs.GetFloat(SfxPrefsKey, sfxVolume);
+
             bgmSource = gameObject.AddComponent<AudioSource>();
             bgmSource.loop = true;
             bgmSource.playOnAwake = false;
@@ -50,6 +56,33 @@ namespace LenteraDirah
             sfxSource.loop = false;
             sfxSource.playOnAwake = false;
             sfxSource.volume = sfxVolume;
+        }
+
+        public float BgmVolume => bgmVolume;
+        public float SfxVolume => sfxVolume;
+
+        public void SetBgmVolume(float value)
+        {
+            bgmVolume = Mathf.Clamp01(value);
+
+            if (bgmSource != null)
+            {
+                bgmSource.volume = bgmVolume;
+            }
+
+            PlayerPrefs.SetFloat(BgmPrefsKey, bgmVolume);
+        }
+
+        public void SetSfxVolume(float value)
+        {
+            sfxVolume = Mathf.Clamp01(value);
+
+            if (sfxSource != null)
+            {
+                sfxSource.volume = sfxVolume;
+            }
+
+            PlayerPrefs.SetFloat(SfxPrefsKey, sfxVolume);
         }
 
         public void PlayBgm()

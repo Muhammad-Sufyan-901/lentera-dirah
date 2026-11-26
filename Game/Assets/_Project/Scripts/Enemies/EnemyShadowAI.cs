@@ -36,10 +36,20 @@ namespace LenteraDirah
         public EnemyState State { get; private set; } = EnemyState.Patrol;
         public float StunRemaining => stunTimer;
 
+        /// <summary>Radius deteksi efektif setelah modifier kesulitan dan terang lentera pemain.</summary>
+        public float CurrentDetectRadius => detectRadius * (player != null ? player.ExposureMultiplier : 1f);
+
+        /// <summary>Radius lepas pengejaran efektif.</summary>
+        public float CurrentLoseRadius => loseRadius * (player != null ? player.ExposureMultiplier : 1f);
+
         private Rigidbody2D body;
         private int waypointIndex;
         private float stunTimer;
         private float auraBaseIntensity = 0.55f;
+        private float basePatrolSpeed;
+        private float baseChaseSpeed;
+        private float baseDetectRadius;
+        private float baseLoseRadius;
 
         private void Awake()
         {
@@ -49,6 +59,20 @@ namespace LenteraDirah
             {
                 auraBaseIntensity = auraLight.intensity;
             }
+
+            basePatrolSpeed = patrolSpeed;
+            baseChaseSpeed = chaseSpeed;
+            baseDetectRadius = detectRadius;
+            baseLoseRadius = loseRadius;
+        }
+
+        /// <summary>Diterapkan ulang saat misi dimulai agar pilihan kesulitan langsung berlaku.</summary>
+        public void ApplyDifficulty()
+        {
+            patrolSpeed = basePatrolSpeed * DifficultySettings.EnemySpeedMultiplier;
+            chaseSpeed = baseChaseSpeed * DifficultySettings.EnemySpeedMultiplier;
+            detectRadius = baseDetectRadius * DifficultySettings.EnemyDetectMultiplier;
+            loseRadius = baseLoseRadius * DifficultySettings.EnemyDetectMultiplier;
         }
 
         private void Start()
@@ -57,6 +81,8 @@ namespace LenteraDirah
             {
                 player = FindAnyObjectByType<PlayerController>();
             }
+
+            ApplyDifficulty();
 
             ApplyTint(patrolTint);
         }
@@ -91,12 +117,14 @@ namespace LenteraDirah
             if (player != null)
             {
                 float distance = Vector2.Distance(transform.position, player.transform.position);
+                float detect = CurrentDetectRadius;
+                float lose = CurrentLoseRadius;
 
-                if (State == EnemyState.Patrol && distance <= detectRadius)
+                if (State == EnemyState.Patrol && distance <= detect)
                 {
                     SetState(EnemyState.Chase);
                 }
-                else if (State == EnemyState.Chase && distance > loseRadius)
+                else if (State == EnemyState.Chase && distance > lose)
                 {
                     SetState(EnemyState.Patrol);
                 }
@@ -153,6 +181,36 @@ namespace LenteraDirah
             }
 
             body.linearVelocity = delta.normalized * patrolSpeed;
+        }
+
+        /// <summary>Kembalikan musuh ke titik awal dan state Patrol saat level dimuat ulang.</summary>
+        public void ResetForLevel(Vector3 position)
+        {
+            gameObject.SetActive(true);
+            transform.position = position;
+
+            if (body == null)
+            {
+                body = GetComponent<Rigidbody2D>();
+            }
+
+            if (body != null)
+            {
+                body.position = position;
+                body.linearVelocity = Vector2.zero;
+            }
+
+            stunTimer = 0f;
+            waypointIndex = 0;
+            State = EnemyState.Patrol;
+            ApplyTint(patrolTint);
+
+            if (auraLight != null)
+            {
+                auraLight.intensity = auraBaseIntensity;
+            }
+
+            ApplyDifficulty();
         }
 
         public void Stun(float duration)

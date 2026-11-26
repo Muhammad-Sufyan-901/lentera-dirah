@@ -37,5 +37,25 @@ namespace LenteraDirah
             minBounds = min;
             maxBounds = max;
         }
+
+        /// <summary>Langsung pusatkan kamera tanpa smoothing setelah level berganti.</summary>
+        public void SnapToTarget()
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            Vector3 desired = new Vector3(target.position.x + offset.x, target.position.y + offset.y, transform.position.z);
+
+            if (clampToBounds)
+            {
+                desired.x = Mathf.Clamp(desired.x, minBounds.x, maxBounds.x);
+                desired.y = Mathf.Clamp(desired.y, minBounds.y, maxBounds.y);
+            }
+
+            velocity = Vector3.zero;
+            transform.position = desired;
+        }
     }
 }

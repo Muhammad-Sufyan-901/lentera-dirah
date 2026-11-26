@@ -29,9 +29,22 @@ namespace LenteraDirah
         private Vector3 basePosition;
         private bool collected;
 
-        private void Start()
+        private void Awake()
         {
             basePosition = transform.position;
+        }
+
+        /// <summary>Dipanggil LevelController saat level dimuat ulang.</summary>
+        public void ResetItem()
+        {
+            collected = false;
+            transform.position = basePosition;
+            gameObject.SetActive(true);
+
+            if (glowLight != null)
+            {
+                glowLight.intensity = glowBaseIntensity;
+            }
         }
 
         private void Update()
@@ -82,7 +95,7 @@ namespace LenteraDirah
                 GameManager.Instance.SetHint($"Minyak Obor: energi lentera +{energyAmount:0}%.");
             }
 
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

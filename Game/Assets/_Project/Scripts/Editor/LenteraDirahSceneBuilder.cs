@@ -36,6 +36,30 @@ namespace LenteraDirah.Editor
         private static Font uiFont;
         private static readonly HashSet<string> savedPrefabs = new HashSet<string>();
 
+        private sealed class EnemySpec
+        {
+            public string Name;
+            public Vector3 Spawn;
+            public Vector3[] Waypoints;
+        }
+
+        private sealed class LevelSpec
+        {
+            public int Number;
+            public string Name;
+            public string Objective;
+            public bool[,] Layout;
+            public Color GroundTint;
+            public int Theme;
+            public Vector3 Spawn;
+            public Vector3 Altar;
+            public Vector3[] LontarPositions;
+            public string[] LontarNames;
+            public string[] LontarQuotes;
+            public Vector3[] OilPositions;
+            public EnemySpec[] Enemies;
+        }
+
         private sealed class HudRefs
         {
             public GameObject Panel;
@@ -43,27 +67,62 @@ namespace LenteraDirah.Editor
             public Text EnergyText;
             public Text LontarText;
             public Text HintText;
+            public Text TimerText;
+            public Text LightStatusText;
+            public Text LevelText;
+            public Text ScoreText;
             public Image[] Hearts;
         }
 
         private sealed class UiRefs
         {
             public GameObject MainMenu;
+            public GameObject DifficultySelect;
             public GameObject HowToPlay;
             public GameObject Dialog;
             public GameObject Hud;
+            public GameObject Pause;
             public GameObject Victory;
             public GameObject GameOver;
+            public GameObject Settings;
+            public GameObject Credits;
             public Text DialogText;
+            public Text VictoryHeading;
             public Text VictoryText;
+            public Text VictoryRankText;
+            public Text VictoryLevelScoreText;
+            public Text VictoryTotalText;
+            public Text VictoryBestText;
             public Text GameOverText;
+            public Text GameOverScoreText;
+            public Text TimerText;
+            public Text LightStatusText;
+            public Text LevelText;
+            public Text ScoreText;
             public Button StartButton;
             public Button HowToPlayButton;
             public Button HowToPlayCloseButton;
             public Button QuitButton;
             public Button DialogButton;
             public Button VictoryButton;
+            public Button VictoryMenuButton;
             public Button GameOverButton;
+            public Button GameOverMenuButton;
+            public Button SettingsButton;
+            public Button SettingsCloseButton;
+            public Button CreditsButton;
+            public Button CreditsCloseButton;
+            public Button ResumeButton;
+            public Button PauseSettingsButton;
+            public Button PauseMenuButton;
+            public Button DifficultyBackButton;
+            public Button[] DifficultyStartButtons;
+            public Slider BgmSlider;
+            public Slider SfxSlider;
+            public Text BgmValueText;
+            public Text SfxValueText;
+            public Button FullscreenButton;
+            public Text FullscreenLabel;
             public Image EnergyFill;
             public Text EnergyText;
             public Text LontarText;
@@ -117,20 +176,25 @@ namespace LenteraDirah.Editor
             Material litMaterial = ProjectConfigurator.EnsureLitMaterial();
 
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            bool[,] open = BuildLayout();
 
             GameObject root = new GameObject("_LenteraDirah");
 
             CreateGlobalLight(root.transform);
-            CreateTilemaps(root.transform, open, litMaterial);
-            CreateBalineseProps(root.transform, litMaterial);
             GameObject player = CreatePlayer(root.transform, litMaterial);
-            CreateEnemies(root.transform, litMaterial);
-            CreateCollectibles(root.transform, litMaterial);
-            CreateAltar(root.transform, litMaterial);
-            CreateCamera(player.transform);
+            CameraFollow2D cameraFollow = CreateCamera(player.transform);
+
+            Transform levelsRoot = new GameObject("Levels").transform;
+            levelsRoot.SetParent(root.transform, false);
+
+            LevelController[] levels =
+            {
+                CreateLevel(levelsRoot, BuildLevelSpec(1), litMaterial, player),
+                CreateLevel(levelsRoot, BuildLevelSpec(2), litMaterial, player),
+                CreateLevel(levelsRoot, BuildLevelSpec(3), litMaterial, player)
+            };
 
             CreateManagers(out GameManager gameManager, out AudioManager audioManager, out UIManager uiManager);
+            LevelManager levelManager = CreateLevelManager(root.transform, player.GetComponent<PlayerController>(), cameraFollow, levels);
             UiRefs uiRefs = CreateUserInterface();
 
             PlayerController playerController = player.GetComponent<PlayerController>();
@@ -138,31 +202,63 @@ namespace LenteraDirah.Editor
             Bind(gameManager, "player", playerController);
             Bind(gameManager, "uiManager", uiManager);
             Bind(gameManager, "audioManager", audioManager);
+            Bind(gameManager, "levelManager", levelManager);
 
             BindAudio(audioManager);
 
             Bind(uiManager, "mainMenuPanel", uiRefs.MainMenu);
+            Bind(uiManager, "difficultySelectPanel", uiRefs.DifficultySelect);
             Bind(uiManager, "howToPlayPanel", uiRefs.HowToPlay);
             Bind(uiManager, "dialogPanel", uiRefs.Dialog);
             Bind(uiManager, "hudPanel", uiRefs.Hud);
+            Bind(uiManager, "pausePanel", uiRefs.Pause);
             Bind(uiManager, "victoryPanel", uiRefs.Victory);
             Bind(uiManager, "gameOverPanel", uiRefs.GameOver);
+            Bind(uiManager, "settingsPanel", uiRefs.Settings);
+            Bind(uiManager, "creditsPanel", uiRefs.Credits);
 
             Bind(uiManager, "energyFill", uiRefs.EnergyFill);
             Bind(uiManager, "energyText", uiRefs.EnergyText);
             Bind(uiManager, "lontarText", uiRefs.LontarText);
             Bind(uiManager, "hintText", uiRefs.HintText);
+            Bind(uiManager, "timerText", uiRefs.TimerText);
+            Bind(uiManager, "lightStatusText", uiRefs.LightStatusText);
+            Bind(uiManager, "levelText", uiRefs.LevelText);
+            Bind(uiManager, "scoreText", uiRefs.ScoreText);
             BindArray(uiManager, "hearts", uiRefs.Hearts);
             Bind(uiManager, "dialogText", uiRefs.DialogText);
+            Bind(uiManager, "victoryHeading", uiRefs.VictoryHeading);
             Bind(uiManager, "victoryText", uiRefs.VictoryText);
+            Bind(uiManager, "victoryRankText", uiRefs.VictoryRankText);
+            Bind(uiManager, "victoryLevelScoreText", uiRefs.VictoryLevelScoreText);
+            Bind(uiManager, "victoryTotalText", uiRefs.VictoryTotalText);
+            Bind(uiManager, "victoryBestText", uiRefs.VictoryBestText);
             Bind(uiManager, "gameOverText", uiRefs.GameOverText);
+            Bind(uiManager, "gameOverScoreText", uiRefs.GameOverScoreText);
             Bind(uiManager, "startButton", uiRefs.StartButton);
             Bind(uiManager, "howToPlayButton", uiRefs.HowToPlayButton);
             Bind(uiManager, "howToPlayCloseButton", uiRefs.HowToPlayCloseButton);
             Bind(uiManager, "quitButton", uiRefs.QuitButton);
             Bind(uiManager, "dialogButton", uiRefs.DialogButton);
             Bind(uiManager, "victoryButton", uiRefs.VictoryButton);
+            Bind(uiManager, "victoryMenuButton", uiRefs.VictoryMenuButton);
             Bind(uiManager, "gameOverButton", uiRefs.GameOverButton);
+            Bind(uiManager, "gameOverMenuButton", uiRefs.GameOverMenuButton);
+            Bind(uiManager, "settingsButton", uiRefs.SettingsButton);
+            Bind(uiManager, "settingsCloseButton", uiRefs.SettingsCloseButton);
+            Bind(uiManager, "creditsButton", uiRefs.CreditsButton);
+            Bind(uiManager, "creditsCloseButton", uiRefs.CreditsCloseButton);
+            Bind(uiManager, "resumeButton", uiRefs.ResumeButton);
+            Bind(uiManager, "pauseSettingsButton", uiRefs.PauseSettingsButton);
+            Bind(uiManager, "pauseMenuButton", uiRefs.PauseMenuButton);
+            Bind(uiManager, "difficultyBackButton", uiRefs.DifficultyBackButton);
+            BindArray(uiManager, "difficultyButtons", uiRefs.DifficultyStartButtons);
+            Bind(uiManager, "bgmSlider", uiRefs.BgmSlider);
+            Bind(uiManager, "sfxSlider", uiRefs.SfxSlider);
+            Bind(uiManager, "bgmValueText", uiRefs.BgmValueText);
+            Bind(uiManager, "sfxValueText", uiRefs.SfxValueText);
+            Bind(uiManager, "fullscreenButton", uiRefs.FullscreenButton);
+            Bind(uiManager, "fullscreenLabel", uiRefs.FullscreenLabel);
 
             ProjectConfigurator.EnsureFolder(ProjectConfigurator.ProjectRoot + "/Scenes");
 
@@ -181,7 +277,7 @@ namespace LenteraDirah.Editor
             Debug.Log($"[LenteraDirah] Scene prototipe dibuat ({saved}): {ProjectConfigurator.ScenePath}");
         }
 
-        private static bool[,] BuildLayout()
+        private static bool[,] BuildLayoutLevel1()
         {
             bool[,] open = new bool[MapWidth, MapHeight];
 
@@ -196,6 +292,321 @@ namespace LenteraDirah.Editor
             CarveRect(open, 19, 5, 4, 6);
 
             return open;
+        }
+
+        /// <summary>Hutan bambu: lorong sempit berkelok dengan beberapa clearing.</summary>
+        private static bool[,] BuildLayoutLevel2()
+        {
+            bool[,] open = new bool[MapWidth, MapHeight];
+
+            CarveRect(open, 20, 4, 4, 7);
+            CarveRect(open, 10, 9, 12, 3);
+            CarveRect(open, 4, 7, 8, 8);
+            CarveRect(open, 5, 14, 3, 9);
+            CarveRect(open, 7, 20, 14, 3);
+            CarveRect(open, 18, 14, 10, 8);
+            CarveRect(open, 27, 16, 9, 3);
+            CarveRect(open, 33, 9, 7, 9);
+            CarveRect(open, 27, 9, 6, 3);
+            CarveRect(open, 22, 10, 3, 5);
+            CarveRect(open, 24, 10, 4, 2);
+            CarveRect(open, 21, 21, 3, 6);
+            CarveRect(open, 16, 26, 12, 4);
+            CarveRect(open, 9, 24, 8, 3);
+
+            return open;
+        }
+
+        /// <summary>Pelataran setra: plaza tengah, sayap barat/timur, dan pura utara.</summary>
+        private static bool[,] BuildLayoutLevel3()
+        {
+            bool[,] open = new bool[MapWidth, MapHeight];
+
+            CarveRect(open, 20, 3, 4, 9);
+            CarveRect(open, 13, 11, 18, 12);
+            CarveRect(open, 17, 24, 10, 5);
+            CarveRect(open, 21, 22, 3, 2);
+            CarveRect(open, 4, 13, 8, 8);
+            CarveRect(open, 12, 16, 2, 2);
+            CarveRect(open, 32, 13, 8, 8);
+            CarveRect(open, 30, 16, 2, 2);
+            CarveRect(open, 5, 6, 8, 5);
+            CarveRect(open, 12, 9, 3, 3);
+            CarveRect(open, 31, 6, 8, 5);
+            CarveRect(open, 30, 9, 2, 3);
+            CarveRect(open, 5, 24, 8, 4);
+            CarveRect(open, 12, 25, 6, 2);
+            CarveRect(open, 31, 24, 8, 4);
+            CarveRect(open, 26, 25, 6, 2);
+
+            return open;
+        }
+
+        private static LevelSpec BuildLevelSpec(int number)
+        {
+            switch (number)
+            {
+                case 2:
+                    return new LevelSpec
+                    {
+                        Number = 2,
+                        Name = "Hutan Bambu Lemah Tulis",
+                        Objective = "Telusuri lorong bambu dan kumpulkan 3 Lontar Suci.",
+                        Layout = BuildLayoutLevel2(),
+                        GroundTint = new Color(0.76f, 0.88f, 0.78f, 1f),
+                        Theme = 2,
+                        Spawn = new Vector3(21f, 6f, 0f),
+                        Altar = new Vector3(22f, 17f, 0f),
+                        LontarPositions = new[]
+                        {
+                            new Vector3(22f, 28f, 0f),
+                            new Vector3(6f, 10f, 0f),
+                            new Vector3(37f, 12f, 0f)
+                        },
+                        LontarNames = new[] { "Lontar Tutur", "Lontar Wariga", "Lontar Gending" },
+                        LontarQuotes = new[]
+                        {
+                            "Lontar Tutur: ajaran tentang tata krama dan kebijaksanaan.",
+                            "Lontar Wariga: ilmu membaca tanda alam dan waktu bercocok tanam.",
+                            "Lontar Gending: seni suara yang menjaga harmoni manusia dan alam."
+                        },
+                        OilPositions = new[]
+                        {
+                            new Vector3(12f, 10f, 0f),
+                            new Vector3(32f, 17f, 0f),
+                            new Vector3(22f, 24f, 0f)
+                        },
+                        Enemies = new[]
+                        {
+                            new EnemySpec
+                            {
+                                Name = "Bayangan_L2_Barat",
+                                Spawn = new Vector3(6f, 10f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(6f, 13f, 0f), new Vector3(9f, 13f, 0f), new Vector3(9f, 10f, 0f)
+                                }
+                            },
+                            new EnemySpec
+                            {
+                                Name = "Bayangan_L2_Tengah",
+                                Spawn = new Vector3(19f, 15f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(25f, 15f, 0f), new Vector3(25f, 20f, 0f), new Vector3(19f, 20f, 0f)
+                                }
+                            },
+                            new EnemySpec
+                            {
+                                Name = "Bayangan_L2_Timur",
+                                Spawn = new Vector3(36f, 10f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(36f, 15f, 0f), new Vector3(34f, 15f, 0f)
+                                }
+                            },
+                            new EnemySpec
+                            {
+                                Name = "Bayangan_L2_Utara",
+                                Spawn = new Vector3(18f, 27f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(26f, 27f, 0f), new Vector3(26f, 29f, 0f), new Vector3(18f, 29f, 0f)
+                                }
+                            }
+                        }
+                    };
+
+                case 3:
+                    return new LevelSpec
+                    {
+                        Number = 3,
+                        Name = "Pelataran Setra Gandamayu",
+                        Objective = "Telusuri pelataran setra dan kumpulkan 3 Lontar Suci.",
+                        Layout = BuildLayoutLevel3(),
+                        GroundTint = new Color(0.9f, 0.84f, 0.78f, 1f),
+                        Theme = 3,
+                        Spawn = new Vector3(21f, 5f, 0f),
+                        Altar = new Vector3(22f, 16.5f, 0f),
+                        LontarPositions = new[]
+                        {
+                            new Vector3(22f, 27f, 0f),
+                            new Vector3(9f, 17f, 0f),
+                            new Vector3(34f, 17f, 0f)
+                        },
+                        LontarNames = new[] { "Lontar Kanda", "Lontar Calonarang", "Lontar Purwa" },
+                        LontarQuotes = new[]
+                        {
+                            "Lontar Kanda: catatan asal-usul dan perjalanan leluhur.",
+                            "Lontar Calonarang: kisah yang mengingatkan bahaya angkara murka.",
+                            "Lontar Purwa: kisah awal yang menjaga keseimbangan dunia."
+                        },
+                        OilPositions = new[]
+                        {
+                            new Vector3(16f, 14f, 0f),
+                            new Vector3(27f, 19f, 0f),
+                            new Vector3(22f, 23f, 0f)
+                        },
+                        Enemies = new[]
+                        {
+                            new EnemySpec
+                            {
+                                Name = "Bayangan_L3_PlazaBarat",
+                                Spawn = new Vector3(15f, 13f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(15f, 20f, 0f), new Vector3(19f, 20f, 0f)
+                                }
+                            },
+                            new EnemySpec
+                            {
+                                Name = "Bayangan_L3_PlazaTimur",
+                                Spawn = new Vector3(28f, 13f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(28f, 20f, 0f), new Vector3(25f, 20f, 0f)
+                                }
+                            },
+                            new EnemySpec
+                            {
+                                Name = "Bayangan_L3_SayapBarat",
+                                Spawn = new Vector3(6f, 15f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(10f, 15f, 0f), new Vector3(10f, 19f, 0f), new Vector3(6f, 19f, 0f)
+                                }
+                            },
+                            new EnemySpec
+                            {
+                                Name = "Bayangan_L3_SayapTimur",
+                                Spawn = new Vector3(36f, 15f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(33f, 15f, 0f), new Vector3(33f, 19f, 0f), new Vector3(36f, 19f, 0f)
+                                }
+                            },
+                            new EnemySpec
+                            {
+                                Name = "Bayangan_L3_Pura",
+                                Spawn = new Vector3(19f, 26f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(25f, 26f, 0f), new Vector3(25f, 27f, 0f), new Vector3(19f, 27f, 0f)
+                                }
+                            }
+                        }
+                    };
+
+                default:
+                    return new LevelSpec
+                    {
+                        Number = 1,
+                        Name = "Desa Girah Bagian Luar",
+                        Objective = "Kumpulkan 3 Lontar Suci di sektor utara, barat, dan timur desa.",
+                        Layout = BuildLayoutLevel1(),
+                        GroundTint = new Color(0.82f, 0.88f, 0.95f, 1f),
+                        Theme = 1,
+                        Spawn = new Vector3(21f, 7f, 0f),
+                        Altar = new Vector3(22f, 17f, 0f),
+                        LontarPositions = new[]
+                        {
+                            new Vector3(21f, 27f, 0f),
+                            new Vector3(6f, 16f, 0f),
+                            new Vector3(37f, 16f, 0f)
+                        },
+                        LontarNames = new[] { "Lontar Usada", "Lontar Dharma", "Lontar Rwa Bhineda" },
+                        LontarQuotes = new[]
+                        {
+                            "Lontar Usada: ilmu pengobatan suci yang menyembuhkan tanpa melukai.",
+                            "Lontar Dharma: kebenaran dan kewajiban, dijaga melalui perbuatan baik.",
+                            "Lontar Rwa Bhineda: terang dan gelap selalu hidup berdampingan, saling menyeimbangkan."
+                        },
+                        OilPositions = new[]
+                        {
+                            new Vector3(24f, 27f, 0f),
+                            new Vector3(10f, 16f, 0f),
+                            new Vector3(33f, 16f, 0f)
+                        },
+                        Enemies = new[]
+                        {
+                            new EnemySpec
+                            {
+                                Name = "EnemyBayangan_Utara",
+                                Spawn = new Vector3(22f, 23f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(22f, 22f, 0f), new Vector3(22f, 28f, 0f), new Vector3(20f, 28f, 0f)
+                                }
+                            },
+                            new EnemySpec
+                            {
+                                Name = "EnemyBayangan_Barat",
+                                Spawn = new Vector3(14f, 17f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(13f, 17f, 0f), new Vector3(6f, 17f, 0f), new Vector3(6f, 20f, 0f)
+                                }
+                            },
+                            new EnemySpec
+                            {
+                                Name = "EnemyBayangan_Timur",
+                                Spawn = new Vector3(29f, 17f, 0f),
+                                Waypoints = new[]
+                                {
+                                    new Vector3(30f, 17f, 0f), new Vector3(37f, 17f, 0f), new Vector3(37f, 20f, 0f)
+                                }
+                            }
+                        }
+                    };
+            }
+        }
+
+        private static LevelController CreateLevel(Transform parent, LevelSpec spec, Material material, GameObject player)
+        {
+            GameObject levelObject = new GameObject($"Level_{spec.Number}_{Slug(spec.Name)}");
+            levelObject.transform.SetParent(parent, false);
+
+            CreateTilemaps(levelObject.transform, spec.Layout, material, spec.GroundTint);
+            CreateBalineseProps(levelObject.transform, material, spec.Theme);
+            CreateEnemies(levelObject.transform, material, spec.Enemies, player.GetComponent<PlayerController>());
+            CreateCollectibles(levelObject.transform, material, spec);
+            CreateAltar(levelObject.transform, material, spec.Altar);
+
+            GameObject spawnObject = new GameObject("SpawnPoint");
+            spawnObject.transform.SetParent(levelObject.transform, false);
+            spawnObject.transform.position = spec.Spawn;
+
+            LevelController controller = levelObject.AddComponent<LevelController>();
+            BindInt(controller, "levelNumber", spec.Number);
+            BindString(controller, "levelName", spec.Name);
+            BindString(controller, "objective", spec.Objective);
+            Bind(controller, "spawnPoint", spawnObject.transform);
+
+            if (spec.Number > 1)
+            {
+                levelObject.SetActive(false);
+            }
+
+            return controller;
+        }
+
+        private static LevelManager CreateLevelManager(Transform parent, PlayerController player, CameraFollow2D cameraFollow, LevelController[] levels)
+        {
+            GameObject managerObject = new GameObject("_LevelManager");
+            managerObject.transform.SetParent(parent, false);
+
+            LevelManager levelManager = managerObject.AddComponent<LevelManager>();
+
+            BindArray(levelManager, "levels", System.Array.ConvertAll(levels, level => (UnityEngine.Object)level));
+            Bind(levelManager, "player", player);
+            Bind(levelManager, "cameraFollow", cameraFollow);
+
+            return levelManager;
+        }
+
+        private static string Slug(string value)
+        {
+            return value.Replace(" ", string.Empty);
         }
 
         private static void CarveRect(bool[,] open, int startX, int startY, int width, int height)
@@ -245,7 +656,7 @@ namespace LenteraDirah.Editor
             light.blendStyleIndex = 0;
         }
 
-        private static void CreateTilemaps(Transform parent, bool[,] open, Material litMaterial)
+        private static void CreateTilemaps(Transform parent, bool[,] open, Material litMaterial, Color groundTint)
         {
             int[,] floorCells = { { 11, 6 }, { 13, 6 }, { 18, 6 }, { 19, 6 } };
             Tile[] floorTiles = new Tile[floorCells.GetLength(0)];
@@ -288,7 +699,7 @@ namespace LenteraDirah.Editor
                 }
             }
 
-            ground.color = new Color(0.82f, 0.88f, 0.95f, 1f);
+            ground.color = groundTint;
         }
 
         private static Tilemap CreateTilemap(Transform parent, string name, int sortingOrder, bool withCollider, Material litMaterial)
@@ -331,10 +742,80 @@ namespace LenteraDirah.Editor
             return tile;
         }
 
-        private static void CreateBalineseProps(Transform parent, Material litMaterial)
+        private static void CreateBalineseProps(Transform parent, Material litMaterial, int theme)
         {
             GameObject props = new GameObject("BalineseProps");
             props.transform.SetParent(parent, false);
+
+            if (theme == 2)
+            {
+                CreateGapura(props.transform, litMaterial, "GapuraHutan", new Vector3(21.5f, 8f, 0f), 0.85f);
+
+                CreateBeringin(props.transform, litMaterial, "Beringin_Hutan_BaratDaya", new Vector3(4f, 8f, 0f), true);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Hutan_TimurDaya", new Vector3(39f, 10f, 0f), true);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Hutan_BaratLaut", new Vector3(5f, 21f, 0f), true);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Hutan_TimurLaut", new Vector3(38f, 16f, 0f), true);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Hutan_Barat", new Vector3(9f, 13f, 0f), false);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Hutan_Timur", new Vector3(34f, 14f, 0f), false);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Hutan_UtaraBarat", new Vector3(16f, 27f, 0f), false);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Hutan_UtaraTimur", new Vector3(27f, 27f, 0f), false);
+
+                CreatePelinggih(props.transform, litMaterial, "Pelinggih_Hutan_Barat", new Vector3(10f, 25f, 0f));
+                CreatePelinggih(props.transform, litMaterial, "Pelinggih_Hutan_Timur", new Vector3(23f, 25f, 0f));
+
+                Vector2[] forestPenjor =
+                {
+                    new Vector2(13f, 20f), new Vector2(28f, 20f), new Vector2(16f, 14f),
+                    new Vector2(27f, 14f), new Vector2(8f, 22f), new Vector2(35f, 9f)
+                };
+
+                for (int i = 0; i < forestPenjor.Length; i++)
+                {
+                    CreateEnvironmentProp(props.transform, litMaterial, $"Penjor_Hutan_{i + 1}", "Penjor.png",
+                        new Vector3(forestPenjor[i].x, forestPenjor[i].y, 0f), 10, 1f);
+                }
+
+                return;
+            }
+
+            if (theme == 3)
+            {
+                CreateGapura(props.transform, litMaterial, "GapuraSetra", new Vector3(21.5f, 8f, 0f), 0.85f);
+
+                CreateMeru(props.transform, litMaterial, "PuraMeru_Setra_Barat", new Vector3(7f, 19f, 0f));
+                CreateMeru(props.transform, litMaterial, "PuraMeru_Setra_Timur", new Vector3(37f, 19f, 0f));
+
+                CreateBaleKulkul(props.transform, litMaterial, "BaleKulkul_Setra_Barat", new Vector3(18f, 21f, 0f));
+                CreateBaleKulkul(props.transform, litMaterial, "BaleKulkul_Setra_Timur", new Vector3(26f, 12f, 0f));
+
+                CreateBeringin(props.transform, litMaterial, "Beringin_Setra_BaratLaut", new Vector3(4f, 20f, 0f), true);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Setra_TimurLaut", new Vector3(39f, 20f, 0f), true);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Setra_BaratDaya", new Vector3(5f, 7f, 0f), false);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Setra_TimurDaya", new Vector3(38f, 7f, 0f), false);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Setra_UtaraBarat", new Vector3(17f, 27f, 0f), false);
+                CreateBeringin(props.transform, litMaterial, "Beringin_Setra_UtaraTimur", new Vector3(26f, 27f, 0f), false);
+
+                CreatePelinggih(props.transform, litMaterial, "Pelinggih_Setra_1", new Vector3(14f, 12f, 0f));
+                CreatePelinggih(props.transform, litMaterial, "Pelinggih_Setra_2", new Vector3(29f, 12f, 0f));
+                CreatePelinggih(props.transform, litMaterial, "Pelinggih_Setra_3", new Vector3(16f, 21f, 0f));
+                CreatePelinggih(props.transform, litMaterial, "Pelinggih_Setra_4", new Vector3(27f, 21f, 0f));
+                CreatePelinggih(props.transform, litMaterial, "Pelinggih_Setra_5", new Vector3(18f, 14f, 0f));
+                CreatePelinggih(props.transform, litMaterial, "Pelinggih_Setra_6", new Vector3(24f, 18f, 0f));
+
+                Vector2[] setraPenjor =
+                {
+                    new Vector2(13f, 22f), new Vector2(30f, 22f),
+                    new Vector2(12f, 10f), new Vector2(31f, 10f)
+                };
+
+                for (int i = 0; i < setraPenjor.Length; i++)
+                {
+                    CreateEnvironmentProp(props.transform, litMaterial, $"Penjor_Setra_{i + 1}", "Penjor.png",
+                        new Vector3(setraPenjor[i].x, setraPenjor[i].y, 0f), 10, 1f);
+                }
+
+                return;
+            }
 
             CreateGapura(props.transform, litMaterial, "GapuraKeluar", new Vector3(21.5f, 9f, 0f), 0.85f);
             CreateGapura(props.transform, litMaterial, "GapuraUtara", new Vector3(21.5f, 24.2f, 0f), 0.85f);
@@ -502,19 +983,14 @@ namespace LenteraDirah.Editor
             return player;
         }
 
-        private static void CreateEnemies(Transform parent, Material litMaterial)
+        private static void CreateEnemies(Transform parent, Material litMaterial, EnemySpec[] specs, PlayerController player)
         {
             AnimatorController spiritController = AssetDatabase.LoadAssetAtPath<AnimatorController>(ProjectConfigurator.SpiritControllerPath);
-            PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
 
-            CreateEnemy(parent, litMaterial, spiritController, player, "EnemyBayangan_Utara", new Vector3(22f, 23f, 0f),
-                new[] { new Vector3(22f, 22f, 0f), new Vector3(22f, 28f, 0f), new Vector3(20f, 28f, 0f) });
-
-            CreateEnemy(parent, litMaterial, spiritController, player, "EnemyBayangan_Barat", new Vector3(14f, 17f, 0f),
-                new[] { new Vector3(13f, 17f, 0f), new Vector3(6f, 17f, 0f), new Vector3(6f, 20f, 0f) });
-
-            CreateEnemy(parent, litMaterial, spiritController, player, "EnemyBayangan_Timur", new Vector3(29f, 17f, 0f),
-                new[] { new Vector3(30f, 17f, 0f), new Vector3(37f, 17f, 0f), new Vector3(37f, 20f, 0f) });
+            foreach (EnemySpec spec in specs)
+            {
+                CreateEnemy(parent, litMaterial, spiritController, player, spec.Name, spec.Spawn, spec.Waypoints);
+            }
         }
 
         private static void CreateEnemy(Transform parent, Material litMaterial, AnimatorController controller, PlayerController player,
@@ -589,20 +1065,19 @@ namespace LenteraDirah.Editor
             BindArray(ai, "waypoints", waypoints.ToArray());
         }
 
-        private static void CreateCollectibles(Transform parent, Material litMaterial)
+        private static void CreateCollectibles(Transform parent, Material litMaterial, LevelSpec spec)
         {
-            CreateCollectible(parent, litMaterial, "LontarSuci_Usada", CollectibleType.Lontar, new Vector3(21f, 27f, 0f),
-                "Lontar Usada", "Lontar Usada: ilmu pengobatan suci yang menyembuhkan tanpa melukai.");
+            for (int i = 0; i < spec.LontarPositions.Length; i++)
+            {
+                CreateCollectible(parent, litMaterial, $"Lontar_{spec.Number}_{i + 1}", CollectibleType.Lontar,
+                    spec.LontarPositions[i], spec.LontarNames[i], spec.LontarQuotes[i]);
+            }
 
-            CreateCollectible(parent, litMaterial, "LontarSuci_Dharma", CollectibleType.Lontar, new Vector3(6f, 16f, 0f),
-                "Lontar Dharma", "Lontar Dharma: kebenaran dan kewajiban, dijaga melalui perbuatan baik.");
-
-            CreateCollectible(parent, litMaterial, "LontarSuci_RwaBhineda", CollectibleType.Lontar, new Vector3(37f, 16f, 0f),
-                "Lontar Rwa Bhineda", "Lontar Rwa Bhineda: terang dan gelap selalu hidup berdampingan, saling menyeimbangkan.");
-
-            CreateCollectible(parent, litMaterial, "MinyakObor_Utara", CollectibleType.Oil, new Vector3(24f, 27f, 0f), null, null);
-            CreateCollectible(parent, litMaterial, "MinyakObor_Barat", CollectibleType.Oil, new Vector3(10f, 16f, 0f), null, null);
-            CreateCollectible(parent, litMaterial, "MinyakObor_Timur", CollectibleType.Oil, new Vector3(33f, 16f, 0f), null, null);
+            for (int i = 0; i < spec.OilPositions.Length; i++)
+            {
+                CreateCollectible(parent, litMaterial, $"Minyak_{spec.Number}_{i + 1}", CollectibleType.Oil,
+                    spec.OilPositions[i], null, null);
+            }
         }
 
         private static void CreateCollectible(Transform parent, Material litMaterial, string name, CollectibleType type,
@@ -667,11 +1142,11 @@ namespace LenteraDirah.Editor
             }
         }
 
-        private static void CreateAltar(Transform parent, Material litMaterial)
+        private static void CreateAltar(Transform parent, Material litMaterial, Vector3 position)
         {
             GameObject altar = new GameObject("AltarPenyucian");
             altar.transform.SetParent(parent, false);
-            altar.transform.position = new Vector3(22f, 17f, 0f);
+            altar.transform.position = position;
             altar.transform.localScale = Vector3.one * 2.2f;
 
             SpriteRenderer renderer = altar.AddComponent<SpriteRenderer>();
@@ -703,7 +1178,7 @@ namespace LenteraDirah.Editor
             SavePrefabCopy(altar, "AltarPenyucian");
         }
 
-        private static void CreateCamera(Transform target)
+        private static CameraFollow2D CreateCamera(Transform target)
         {
             GameObject cameraObject = new GameObject("Main Camera", typeof(Camera));
             cameraObject.tag = "MainCamera";
@@ -733,6 +1208,8 @@ namespace LenteraDirah.Editor
             follow.SetBounds(
                 new Vector2(halfWidth, halfHeight),
                 new Vector2(MapWidth - halfWidth, MapHeight - halfHeight));
+
+            return follow;
         }
 
         private static void CreateManagers(out GameManager gameManager, out AudioManager audioManager, out UIManager uiManager)
@@ -783,12 +1260,25 @@ namespace LenteraDirah.Editor
             refs.EnergyText = hud.EnergyText;
             refs.LontarText = hud.LontarText;
             refs.HintText = hud.HintText;
+            refs.TimerText = hud.TimerText;
+            refs.LightStatusText = hud.LightStatusText;
+            refs.LevelText = hud.LevelText;
+            refs.ScoreText = hud.ScoreText;
             refs.Hearts = hud.Hearts;
 
-            refs.MainMenu = CreateMainMenu(canvas.transform, panelSprite, dialogSprite, out Button startButton, out Button howToPlayButton, out Button quitButton);
+            refs.MainMenu = CreateMainMenu(canvas.transform, panelSprite, dialogSprite,
+                out Button startButton, out Button howToPlayButton, out Button settingsButton,
+                out Button creditsButton, out Button quitButton);
             refs.StartButton = startButton;
             refs.HowToPlayButton = howToPlayButton;
+            refs.SettingsButton = settingsButton;
+            refs.CreditsButton = creditsButton;
             refs.QuitButton = quitButton;
+
+            refs.DifficultySelect = CreateDifficultySelect(canvas.transform, panelSprite, dialogSprite,
+                out Button[] difficultyStartButtons, out Button difficultyBackButton);
+            refs.DifficultyStartButtons = difficultyStartButtons;
+            refs.DifficultyBackButton = difficultyBackButton;
 
             refs.HowToPlay = CreateHowToPlay(canvas.transform, panelSprite, dialogSprite, out Button howToPlayCloseButton);
             refs.HowToPlayCloseButton = howToPlayCloseButton;
@@ -797,21 +1287,56 @@ namespace LenteraDirah.Editor
             refs.DialogText = dialogText;
             refs.DialogButton = dialogButton;
 
-            refs.Victory = CreateEndScreen(canvas.transform, panelSprite, dialogSprite, "Victory_Panel", "DESA GIRAH PULIH", Gold,
-                out Text victoryText, out Button victoryButton, "MAIN LAGI");
+            refs.Victory = CreateVictoryScreen(canvas.transform, panelSprite, dialogSprite,
+                out Text victoryHeading, out Text victoryText, out Text victoryRank,
+                out Text victoryLevelScore, out Text victoryTotal, out Text victoryBest,
+                out Button victoryButton, out Button victoryMenuButton);
+            refs.VictoryHeading = victoryHeading;
             refs.VictoryText = victoryText;
+            refs.VictoryRankText = victoryRank;
+            refs.VictoryLevelScoreText = victoryLevelScore;
+            refs.VictoryTotalText = victoryTotal;
+            refs.VictoryBestText = victoryBest;
             refs.VictoryButton = victoryButton;
+            refs.VictoryMenuButton = victoryMenuButton;
 
-            refs.GameOver = CreateEndScreen(canvas.transform, panelSprite, dialogSprite, "GameOver_Panel", "KEGELAPAN MENYELIMUTI",
-                new Color(0.85f, 0.35f, 0.42f), out Text gameOverText, out Button gameOverButton, "COBA LAGI");
+            refs.GameOver = CreateGameOverScreen(canvas.transform, panelSprite, dialogSprite,
+                out Text gameOverText, out Text gameOverScore, out Button gameOverButton, out Button gameOverMenuButton);
             refs.GameOverText = gameOverText;
+            refs.GameOverScoreText = gameOverScore;
             refs.GameOverButton = gameOverButton;
+            refs.GameOverMenuButton = gameOverMenuButton;
+
+            refs.Pause = CreatePause(canvas.transform, panelSprite, dialogSprite,
+                out Button resumeButton, out Button pauseSettingsButton, out Button pauseMenuButton);
+            refs.ResumeButton = resumeButton;
+            refs.PauseSettingsButton = pauseSettingsButton;
+            refs.PauseMenuButton = pauseMenuButton;
+
+            refs.Settings = CreateSettings(canvas.transform, panelSprite, dialogSprite,
+                out Button settingsCloseButton, out Slider bgmSlider, out Slider sfxSlider,
+                out Text bgmValueText, out Text sfxValueText,
+                out Button fullscreenButton, out Text fullscreenLabel);
+            refs.SettingsCloseButton = settingsCloseButton;
+            refs.BgmSlider = bgmSlider;
+            refs.SfxSlider = sfxSlider;
+            refs.BgmValueText = bgmValueText;
+            refs.SfxValueText = sfxValueText;
+            refs.FullscreenButton = fullscreenButton;
+            refs.FullscreenLabel = fullscreenLabel;
+
+            refs.Credits = CreateCredits(canvas.transform, panelSprite, dialogSprite, out Button creditsCloseButton);
+            refs.CreditsCloseButton = creditsCloseButton;
 
             refs.Dialog.SetActive(false);
+            refs.DifficultySelect.SetActive(false);
             refs.Victory.SetActive(false);
             refs.GameOver.SetActive(false);
             refs.Hud.SetActive(false);
             refs.HowToPlay.SetActive(false);
+            refs.Pause.SetActive(false);
+            refs.Settings.SetActive(false);
+            refs.Credits.SetActive(false);
 
             return refs;
         }
@@ -824,6 +1349,12 @@ namespace LenteraDirah.Editor
 
             RectTransform title = Place(NewRect("TitleHUD", hud), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -26f), new Vector2(800f, 44f));
             AddText(title, "LENTERA DIRAH", 30, Gold, TextAnchor.MiddleCenter);
+
+            RectTransform levelLabel = Place(NewRect("LevelText", hud), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+                new Vector2(0f, -64f), new Vector2(900f, 32f));
+            refs.LevelText = AddText(levelLabel, "LEVEL 1/3 — DESA GIRAH BAGIAN LUAR", 20,
+                new Color(0.88f, 0.86f, 0.82f), TextAnchor.MiddleCenter);
+            AddOutline(refs.LevelText, new Color(0f, 0f, 0f, 0.9f));
 
             refs.Hearts = new Image[3];
 
@@ -857,6 +1388,22 @@ namespace LenteraDirah.Editor
             refs.LontarText = AddText(lontar, "LONTAR SUCI: 0 / 3", 28, Gold, TextAnchor.MiddleRight);
             AddOutline(refs.LontarText, new Color(0f, 0f, 0f, 0.9f));
 
+            RectTransform timer = Place(NewRect("TimerText", hud), new Vector2(1f, 1f), new Vector2(1f, 1f),
+                new Vector2(-26f, -84f), new Vector2(460f, 36f));
+            refs.TimerText = AddText(timer, "WAKTU  00:00", 24, new Color(0.392f, 0.784f, 1f), TextAnchor.MiddleRight);
+            AddOutline(refs.TimerText, new Color(0f, 0f, 0f, 0.9f));
+
+            RectTransform score = Place(NewRect("ScoreText", hud), new Vector2(1f, 1f), new Vector2(1f, 1f),
+                new Vector2(-26f, -120f), new Vector2(460f, 32f));
+            refs.ScoreText = AddText(score, "SKOR: 0", 22, Gold, TextAnchor.MiddleRight);
+            AddOutline(refs.ScoreText, new Color(0f, 0f, 0f, 0.9f));
+
+            RectTransform lightStatus = Place(NewRect("LightStatusText", hud), new Vector2(0f, 1f), new Vector2(0f, 1f),
+                new Vector2(26f, -142f), new Vector2(760f, 32f));
+            refs.LightStatusText = AddText(lightStatus, "CAHAYA: TERANG  ·  deteksi musuh +30%", 18,
+                new Color(0.88f, 0.88f, 0.92f), TextAnchor.MiddleLeft);
+            AddOutline(refs.LightStatusText, new Color(0f, 0f, 0f, 0.9f));
+
             RectTransform hint = Place(NewRect("HintText", hud), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f),
                 new Vector2(0f, 150f), new Vector2(1500f, 110f));
             refs.HintText = AddText(hint, string.Empty, 26, Gold, TextAnchor.MiddleCenter);
@@ -864,7 +1411,7 @@ namespace LenteraDirah.Editor
 
             RectTransform controls = Place(NewRect("Controls", hud), new Vector2(0f, 0f), new Vector2(0f, 0f),
                 new Vector2(26f, 24f), new Vector2(1100f, 60f));
-            AddText(controls, "[WASD / Panah] Bergerak    [SPACE] Pancaran Cahaya Suci    [E] Lanjut Dialog", 20,
+            AddText(controls, "[WASD / Panah] Bergerak    [SPACE] Pancaran Cahaya Suci    [E] Lanjut Dialog    [ESC] Jeda", 20,
                 new Color(Gold.r, Gold.g, Gold.b, 0.8f), TextAnchor.LowerLeft);
             AddOutline(controls.GetComponent<Text>(), new Color(0f, 0f, 0f, 0.9f));
 
@@ -872,7 +1419,8 @@ namespace LenteraDirah.Editor
         }
 
         private static GameObject CreateMainMenu(Transform canvas, Sprite panelSprite, Sprite buttonSprite,
-            out Button startButton, out Button howToPlayButton, out Button quitButton)
+            out Button startButton, out Button howToPlayButton, out Button settingsButton,
+            out Button creditsButton, out Button quitButton)
         {
             GameObject panel = CreateOverlay(canvas, "MainMenu_Panel", new Color(Midnight.r, Midnight.g, Midnight.b, 0.94f));
 
@@ -931,17 +1479,74 @@ namespace LenteraDirah.Editor
             RectTransform body = Place(NewRect("Body", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
                 new Vector2(0f, 20f), new Vector2(900f, 150f));
             AddText(body,
-                "Kabut wabah dari Setra Gandamayu menyelimuti Desa Girah. Jelajahi kegelapan sebagai Bahula, " +
-                "tenangkan Bayangan Wabah dengan cahaya lentera, lalu kembalikan 3 Lontar Suci ke Altar Penyucian.",
+                "Kabut wabah menyelimuti tiga wilayah. Jelajahi Desa Girah, Hutan Bambu Lemah Tulis, dan " +
+                "Pelataran Setra Gandamayu; kumpulkan 3 Lontar Suci di tiap wilayah dan sucikan Altarnya.",
                 24, new Color(0.88f, 0.85f, 0.8f), TextAnchor.MiddleCenter);
 
             RectTransform footnote = Place(NewRect("Footnote", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
                 new Vector2(0f, -282f), new Vector2(900f, 40f));
             AddText(footnote, "Rwa Bhineda — terang dan gelap saling menyeimbangkan", 20, new Color(0.64f, 0.784f, 1f), TextAnchor.MiddleCenter);
 
-            startButton = CreateButton(box, "StartButton", "MULAI PENYUCIAN", buttonSprite, new Vector2(0f, -110f), new Vector2(480f, 84f));
-            howToPlayButton = CreateButton(box, "HowToPlayButton", "CARA BERMAIN", buttonSprite, new Vector2(-168f, -206f), new Vector2(320f, 62f));
-            quitButton = CreateButton(box, "QuitButton", "KELUAR", buttonSprite, new Vector2(170f, -206f), new Vector2(300f, 62f));
+            startButton = CreateButton(box, "StartButton", "MULAI BERMAIN", buttonSprite, new Vector2(0f, -110f), new Vector2(480f, 84f));
+            howToPlayButton = CreateButton(box, "HowToPlayButton", "CARA BERMAIN", buttonSprite, new Vector2(-390f, -206f), new Vector2(250f, 62f), 24);
+            settingsButton = CreateButton(box, "SettingsButton", "PENGATURAN", buttonSprite, new Vector2(-115f, -206f), new Vector2(250f, 62f), 24);
+            creditsButton = CreateButton(box, "CreditsButton", "KREDIT", buttonSprite, new Vector2(150f, -206f), new Vector2(200f, 62f), 24);
+            quitButton = CreateButton(box, "QuitButton", "KELUAR", buttonSprite, new Vector2(370f, -206f), new Vector2(200f, 62f), 24);
+
+            return panel;
+        }
+
+        private static GameObject CreateDifficultySelect(Transform canvas, Sprite panelSprite, Sprite buttonSprite,
+            out Button[] startButtons, out Button backButton)
+        {
+            GameObject panel = CreateOverlay(canvas, "Difficulty_Panel", new Color(0.02f, 0.02f, 0.04f, 0.96f));
+
+            RectTransform box = Place(NewRect("DifficultyBox", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(1120f, 780f));
+            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.99f), true);
+
+            RectTransform title = Place(NewRect("DifficultyTitle", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 330f), new Vector2(950f, 80f));
+            AddText(title, "PILIH KESULITAN", 52, Gold, TextAnchor.MiddleCenter);
+
+            RectTransform subtitle = Place(NewRect("DifficultySubtitle", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 262f), new Vector2(950f, 44f));
+            AddText(subtitle, "Pilihan berlaku untuk ketiga level dan menentukan pengali skor.", 22,
+                new Color(0.86f, 0.86f, 0.95f), TextAnchor.MiddleCenter);
+
+            AddImage(Place(NewRect("DifficultyOrnament", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, 228f), new Vector2(860f, 2f)),
+                null, new Color(Gold.r, Gold.g, Gold.b, 0.55f), false);
+
+            startButtons = new Button[3];
+            string[] labels = { "MUDAH", "NORMAL", "SULIT" };
+            string[] descriptions =
+            {
+                "Cahaya awet, musuh lambat. Pengali skor x1.0.",
+                "Pengalaman sesuai GDD. Pengali skor x1.25.",
+                "Cahaya cepat habis, musuh peka. Pengali skor x1.5."
+            };
+            string[] names = { "StartDifficulty_Mudah", "StartDifficulty_Normal", "StartDifficulty_Sulit" };
+
+            for (int i = 0; i < 3; i++)
+            {
+                float y = 135f - i * 120f;
+                startButtons[i] = CreateButton(box, names[i], labels[i], buttonSprite,
+                    new Vector2(-270f, y), new Vector2(320f, 70f), 26);
+
+                RectTransform description = Place(NewRect($"{labels[i]}_Description", box),
+                    new Vector2(0.5f, 0.5f), new Vector2(0f, 0.5f),
+                    new Vector2(70f, y), new Vector2(620f, 70f));
+                AddText(description, descriptions[i], 20, new Color(0.88f, 0.86f, 0.82f), TextAnchor.MiddleLeft);
+            }
+
+            RectTransform note = Place(NewRect("DifficultyNote", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -205f), new Vector2(900f, 40f));
+            AddText(note, "Kesulitan tidak dapat diubah di tengah permainan.", 18,
+                new Color(0.64f, 0.784f, 1f), TextAnchor.MiddleCenter);
+
+            backButton = CreateButton(box, "DifficultyBackButton", "KEMBALI", buttonSprite,
+                new Vector2(0f, -300f), new Vector2(300f, 62f));
 
             return panel;
         }
@@ -951,41 +1556,300 @@ namespace LenteraDirah.Editor
             GameObject panel = CreateOverlay(canvas, "HowToPlay_Panel", new Color(0.02f, 0.02f, 0.04f, 0.93f));
 
             RectTransform box = Place(NewRect("HowToPlayBox", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                Vector2.zero, new Vector2(1100f, 800f));
+                Vector2.zero, new Vector2(1150f, 900f));
             AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.985f), true);
 
             RectTransform title = Place(NewRect("HowToPlayTitle", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                new Vector2(0f, 332f), new Vector2(900f, 80f));
+                new Vector2(0f, 390f), new Vector2(900f, 80f));
             AddText(title, "CARA BERMAIN", 52, Gold, TextAnchor.MiddleCenter);
 
             AddImage(Place(NewRect("HowToPlayOrnament", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                    new Vector2(0f, 284f), new Vector2(820f, 2f)),
+                    new Vector2(0f, 342f), new Vector2(820f, 2f)),
                 null, new Color(Gold.r, Gold.g, Gold.b, 0.55f), false);
 
             RectTransform body = Place(NewRect("HowToPlayBody", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                new Vector2(0f, -8f), new Vector2(940f, 560f));
+                new Vector2(0f, 5f), new Vector2(1020f, 660f));
             Text bodyText = AddText(body,
                 "<b>TUJUAN</b>\n" +
-                "Kumpulkan 3 Lontar Suci (Usada, Dharma, Rwa Bhineda) di sektor utara, barat, dan timur desa, " +
-                "lalu sentuh Altar Penyucian di tengah desa.\n\n" +
+                "Selesaikan tiga level: Desa Girah, Hutan Bambu Lemah Tulis, dan Pelataran Setra Gandamayu. " +
+                "Di tiap level, kumpulkan 3 Lontar Suci lalu sentuh Altar Penyucian.\n\n" +
                 "<b>KONTROL</b>\n" +
                 "[WASD / Panah]  Bergerak 4 arah\n" +
                 "[SPACE]  Holy Light Burst — membekukan Bayangan Wabah di sekitar selama 3 detik\n" +
+                "[ESC]  Jeda, pengaturan, atau kembali\n" +
                 "[E] atau klik tombol  — melanjutkan dialog\n\n" +
                 "<b>ENERGI LENTERA</b>\n" +
-                "Energi menyusut 2% per detik dan radius cahaya ikut mengecil. Ambil Minyak Obor untuk menambah " +
-                "+35% energi. Bila energi habis, permainan berakhir.\n\n" +
+                "Energi menyusut 2% per detik dan radius cahaya ikut mengecil. Ambil Minyak Obor untuk " +
+                "menambah +35% energi. Bila energi habis, level berakhir.\n\n" +
+                "<b>RWA BHINEDA</b>\n" +
+                "Makin terang lentera, makin jauh Bayangan Wabah mendeteksimu (hingga +30%). Lentera redup " +
+                "menyamarkan langkahmu (hingga -30%), tetapi pandangan ikut menyempit.\n\n" +
                 "<b>BAYANGAN WABAH</b>\n" +
-                "Hindari patrolinya. Burst memakai 15% energi (cooldown 4 detik, radius 3.5 unit). Tersentuh musuh " +
-                "mengurangi 1 nyawa; kamu kebal 1 detik setelahnya.\n\n" +
+                "Hindari patrolinya. Burst memakai 15% energi (cooldown 4 detik, radius 3.5 unit). Tersentuh " +
+                "musuh mengurangi 1 nyawa; kamu kebal 1 detik setelahnya.\n\n" +
+                "<b>KESULITAN & SKOR</b>\n" +
+                "Pilih Mudah/Normal/Sulit setelah MULAI BERMAIN. Skor level berasal dari waktu, nyawa, dan " +
+                "sisa energi, dikali pengali kesulitan. Menang membuka level berikutnya.\n\n" +
                 "<b>TIPS</b>\n" +
-                "Amati pola patroli sebelum mengambil Lontar, dan simpan energi untuk situasi terjepit.",
-                20, new Color(0.92f, 0.9f, 0.86f), TextAnchor.UpperLeft);
-            bodyText.lineSpacing = 1.15f;
+                "Amati pola patroli sebelum mengambil Lontar, dan atur terang lentera agar tidak mudah terdeteksi.",
+                19, new Color(0.92f, 0.9f, 0.86f), TextAnchor.UpperLeft);
+            bodyText.lineSpacing = 1.12f;
 
-            closeButton = CreateButton(box, "HowToPlayCloseButton", "KEMBALI", buttonSprite, new Vector2(0f, -336f), new Vector2(300f, 62f));
+            closeButton = CreateButton(box, "HowToPlayCloseButton", "KEMBALI", buttonSprite, new Vector2(0f, -395f), new Vector2(300f, 62f));
 
             return panel;
+        }
+
+        private static GameObject CreatePause(Transform canvas, Sprite panelSprite, Sprite buttonSprite,
+            out Button resumeButton, out Button settingsButton, out Button menuButton)
+        {
+            GameObject panel = CreateOverlay(canvas, "Pause_Panel", new Color(0.02f, 0.02f, 0.04f, 0.72f));
+
+            RectTransform box = Place(NewRect("PauseBox", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(860f, 600f));
+            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.98f), true);
+
+            RectTransform title = Place(NewRect("PauseTitle", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 220f), new Vector2(700f, 90f));
+            AddText(title, "JEDA", 56, Gold, TextAnchor.MiddleCenter);
+
+            RectTransform subtitle = Place(NewRect("PauseSubtitle", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 150f), new Vector2(700f, 40f));
+            AddText(subtitle, "Cahaya lentera menanti di tengah kabut.", 22, new Color(0.86f, 0.86f, 0.95f), TextAnchor.MiddleCenter);
+
+            resumeButton = CreateButton(box, "ResumeButton", "LANJUTKAN", buttonSprite, new Vector2(0f, 55f), new Vector2(380f, 70f));
+            settingsButton = CreateButton(box, "PauseSettingsButton", "PENGATURAN", buttonSprite, new Vector2(0f, -40f), new Vector2(380f, 62f), 24);
+            menuButton = CreateButton(box, "PauseMenuButton", "KE MENU UTAMA", buttonSprite, new Vector2(0f, -130f), new Vector2(380f, 62f), 24);
+
+            RectTransform hint = Place(NewRect("PauseHint", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -230f), new Vector2(700f, 36f));
+            AddText(hint, "ESC untuk melanjutkan", 18, new Color(0.64f, 0.784f, 1f), TextAnchor.MiddleCenter);
+
+            return panel;
+        }
+
+        private static GameObject CreateSettings(Transform canvas, Sprite panelSprite, Sprite buttonSprite,
+            out Button closeButton, out Slider bgmSlider, out Slider sfxSlider,
+            out Text bgmValueText, out Text sfxValueText,
+            out Button fullscreenButton, out Text fullscreenLabel)
+        {
+            GameObject panel = CreateOverlay(canvas, "Settings_Panel", new Color(0.02f, 0.02f, 0.04f, 0.94f));
+
+            RectTransform box = Place(NewRect("SettingsBox", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(1120f, 900f));
+            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.99f), true);
+
+            RectTransform title = Place(NewRect("SettingsTitle", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 380f), new Vector2(900f, 80f));
+            AddText(title, "PENGATURAN", 50, Gold, TextAnchor.MiddleCenter);
+
+            AddImage(Place(NewRect("SettingsOrnament", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, 332f), new Vector2(860f, 2f)),
+                null, new Color(Gold.r, Gold.g, Gold.b, 0.55f), false);
+
+            RectTransform musicLabel = Place(NewRect("MusicLabel", box), new Vector2(0.5f, 0.5f), new Vector2(0f, 0.5f),
+                new Vector2(-470f, 285f), new Vector2(640f, 36f));
+            AddText(musicLabel, "MUSIK LATAR (GAMELAN)", 24, new Color(0.92f, 0.9f, 0.86f), TextAnchor.MiddleLeft);
+
+            RectTransform musicValue = Place(NewRect("MusicValue", box), new Vector2(0.5f, 0.5f), new Vector2(1f, 0.5f),
+                new Vector2(470f, 285f), new Vector2(120f, 36f));
+            bgmValueText = AddText(musicValue, "35%", 24, Gold, TextAnchor.MiddleRight);
+
+            bgmSlider = CreateVolumeSlider(box, "BgmSlider", panelSprite, new Vector2(0f, 235f), 900f);
+
+            RectTransform sfxLabel = Place(NewRect("SfxLabel", box), new Vector2(0.5f, 0.5f), new Vector2(0f, 0.5f),
+                new Vector2(-470f, 165f), new Vector2(640f, 36f));
+            AddText(sfxLabel, "EFEK SUARA", 24, new Color(0.92f, 0.9f, 0.86f), TextAnchor.MiddleLeft);
+
+            RectTransform sfxValue = Place(NewRect("SfxValue", box), new Vector2(0.5f, 0.5f), new Vector2(1f, 0.5f),
+                new Vector2(470f, 165f), new Vector2(120f, 36f));
+            sfxValueText = AddText(sfxValue, "85%", 24, Gold, TextAnchor.MiddleRight);
+
+            sfxSlider = CreateVolumeSlider(box, "SfxSlider", panelSprite, new Vector2(0f, 115f), 900f);
+
+            fullscreenButton = CreateButton(box, "FullscreenButton", "LAYAR PENUH: NONAKTIF", buttonSprite, new Vector2(0f, -20f), new Vector2(480f, 60f), 22);
+            fullscreenLabel = fullscreenButton.GetComponentInChildren<Text>();
+
+            RectTransform note = Place(NewRect("SettingsNote", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -100f), new Vector2(940f, 40f));
+            AddText(note, "Kesulitan dipilih saat memulai permainan baru.", 18,
+                new Color(0.64f, 0.784f, 1f), TextAnchor.MiddleCenter);
+
+            RectTransform saveNote = Place(NewRect("SettingsSaveNote", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -145f), new Vector2(940f, 40f));
+            AddText(saveNote, "Perubahan tersimpan otomatis.", 18,
+                new Color(0.64f, 0.784f, 1f), TextAnchor.MiddleCenter);
+
+            closeButton = CreateButton(box, "SettingsCloseButton", "KEMBALI", buttonSprite, new Vector2(0f, -260f), new Vector2(300f, 62f));
+
+            return panel;
+        }
+
+        private static GameObject CreateCredits(Transform canvas, Sprite panelSprite, Sprite buttonSprite, out Button closeButton)
+        {
+            GameObject panel = CreateOverlay(canvas, "Credits_Panel", new Color(0.02f, 0.02f, 0.04f, 0.95f));
+
+            RectTransform box = Place(NewRect("CreditsBox", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(1100f, 840f));
+            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.99f), true);
+
+            RectTransform title = Place(NewRect("CreditsTitle", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 355f), new Vector2(900f, 80f));
+            AddText(title, "KREDIT", 50, Gold, TextAnchor.MiddleCenter);
+
+            AddImage(Place(NewRect("CreditsOrnament", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, 307f), new Vector2(860f, 2f)),
+                null, new Color(Gold.r, Gold.g, Gold.b, 0.55f), false);
+
+            RectTransform body = Place(NewRect("CreditsBody", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -10f), new Vector2(980f, 590f));
+            Text bodyText = AddText(body,
+                "LENTERA DIRAH: LONTAR MPU BHARADA\n\n" +
+                "<b>Desain game, pemrograman, dan perakitan aset</b>\n" +
+                "Muhammad Sufyan — 230030309\n\n" +
+                "Mata kuliah Pengembangan Permainan Digital\n" +
+                "ITB STIKOM Bali · 2026\n\n" +
+                "<b>ASET & LISENSI</b>\n" +
+                "Ninja Adventure Asset Pack — Pixel-Boy & AAA (CC0 1.0)\n" +
+                "Gendér Wayang (1928), Gamelan Gender Wayang Bali — Public Domain, Wikimedia Commons\n" +
+                "Aset lingkungan Bali & restyle Bahula — dibuat untuk proyek ini (CC0 1.0)\n" +
+                "Universal Render Pipeline 2D Lights — Unity Technologies\n\n" +
+                "Terima kasih telah menjaga cahaya Desa Girah.",
+                20, new Color(0.92f, 0.9f, 0.86f), TextAnchor.UpperCenter);
+            bodyText.lineSpacing = 1.16f;
+
+            closeButton = CreateButton(box, "CreditsCloseButton", "KEMBALI", buttonSprite, new Vector2(0f, -355f), new Vector2(300f, 62f));
+
+            return panel;
+        }
+
+        private static GameObject CreateVictoryScreen(Transform canvas, Sprite panelSprite, Sprite buttonSprite,
+            out Text headingText, out Text bodyText, out Text rankText, out Text levelScoreText,
+            out Text totalText, out Text bestText, out Button actionButton, out Button menuButton)
+        {
+            GameObject panel = CreateOverlay(canvas, "Victory_Panel", new Color(0.03f, 0.03f, 0.06f, 0.9f));
+
+            RectTransform box = Place(NewRect("Box", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(1100f, 880f));
+            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.97f), true);
+
+            RectTransform title = Place(NewRect("Heading", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 350f), new Vector2(1000f, 80f));
+            headingText = AddText(title, "LEVEL 1 SELESAI", 50, Gold, TextAnchor.MiddleCenter);
+
+            AddImage(Place(NewRect("Ornament", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0f, 305f), new Vector2(860f, 2f)),
+                null, new Color(Gold.r, Gold.g, Gold.b, 0.55f), false);
+
+            RectTransform body = Place(NewRect("Body", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 220f), new Vector2(960f, 140f));
+            bodyText = AddText(body, string.Empty, 22, new Color(0.9f, 0.88f, 0.84f), TextAnchor.MiddleCenter);
+
+            RectTransform rank = Place(NewRect("Rank", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 110f), new Vector2(900f, 60f));
+            rankText = AddText(rank, string.Empty, 38, Gold, TextAnchor.MiddleCenter);
+
+            RectTransform levelScore = Place(NewRect("LevelScore", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 40f), new Vector2(900f, 40f));
+            levelScoreText = AddText(levelScore, string.Empty, 24, new Color(0.92f, 0.9f, 0.86f), TextAnchor.MiddleCenter);
+
+            RectTransform total = Place(NewRect("TotalScore", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -10f), new Vector2(900f, 40f));
+            totalText = AddText(total, string.Empty, 24, new Color(0.92f, 0.9f, 0.86f), TextAnchor.MiddleCenter);
+
+            RectTransform best = Place(NewRect("Best", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -60f), new Vector2(900f, 36f));
+            bestText = AddText(best, string.Empty, 20, new Color(0.392f, 0.784f, 1f), TextAnchor.MiddleCenter);
+
+            actionButton = CreateButton(box, "ActionButton", "LEVEL BERIKUTNYA", buttonSprite,
+                new Vector2(0f, -170f), new Vector2(440f, 72f), 24);
+            menuButton = CreateButton(box, "MenuButton", "MENU UTAMA", buttonSprite,
+                new Vector2(0f, -265f), new Vector2(360f, 56f), 22);
+
+            return panel;
+        }
+
+        private static GameObject CreateGameOverScreen(Transform canvas, Sprite panelSprite, Sprite buttonSprite,
+            out Text bodyText, out Text scoreText, out Button actionButton, out Button menuButton)
+        {
+            GameObject panel = CreateOverlay(canvas, "GameOver_Panel", new Color(0.03f, 0.03f, 0.06f, 0.9f));
+
+            RectTransform box = Place(NewRect("Box", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(1000f, 720f));
+            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.97f), true);
+
+            RectTransform title = Place(NewRect("Heading", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 260f), new Vector2(900f, 90f));
+            AddText(title, "KEGELAPAN MENYELIMUTI", 50, new Color(0.85f, 0.35f, 0.42f), TextAnchor.MiddleCenter);
+
+            RectTransform body = Place(NewRect("Body", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 145f), new Vector2(900f, 140f));
+            bodyText = AddText(body, string.Empty, 24, new Color(0.9f, 0.88f, 0.84f), TextAnchor.MiddleCenter);
+
+            RectTransform score = Place(NewRect("Score", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 50f), new Vector2(900f, 44f));
+            scoreText = AddText(score, string.Empty, 26, Gold, TextAnchor.MiddleCenter);
+
+            RectTransform note = Place(NewRect("Note", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -5f), new Vector2(900f, 36f));
+            AddText(note, "Skor level ini tidak dihitung. Coba lagi untuk melanjutkan.", 18,
+                new Color(0.78f, 0.76f, 0.72f), TextAnchor.MiddleCenter);
+
+            actionButton = CreateButton(box, "ActionButton", "COBA LAGI", buttonSprite,
+                new Vector2(0f, -100f), new Vector2(380f, 70f), 24);
+            menuButton = CreateButton(box, "MenuButton", "MENU UTAMA", buttonSprite,
+                new Vector2(0f, -190f), new Vector2(360f, 56f), 22);
+
+            return panel;
+        }
+
+        private static Slider CreateVolumeSlider(Transform parent, string name, Sprite sprite, Vector2 position, float width)
+        {
+            DefaultControls.Resources resources = new DefaultControls.Resources
+            {
+                standard = sprite,
+                background = sprite
+            };
+
+            GameObject sliderObject = DefaultControls.CreateSlider(resources);
+            sliderObject.name = name;
+
+            RectTransform rect = (RectTransform)sliderObject.transform;
+            rect.SetParent(parent, false);
+            Place(rect, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), position, new Vector2(width, 28f));
+
+            Slider slider = sliderObject.GetComponent<Slider>();
+            slider.minValue = 0f;
+            slider.maxValue = 1f;
+            slider.transition = Selectable.Transition.None;
+
+            Transform background = sliderObject.transform.Find("Background");
+
+            if (background != null)
+            {
+                Image backgroundImage = background.GetComponent<Image>();
+                backgroundImage.color = new Color(0.16f, 0.16f, 0.24f, 0.95f);
+            }
+
+            Transform fill = sliderObject.transform.Find("Fill Area/Fill");
+
+            if (fill != null)
+            {
+                Image fillImage = fill.GetComponent<Image>();
+                fillImage.color = Gold;
+            }
+
+            Transform handle = sliderObject.transform.Find("Handle Slide Area/Handle");
+
+            if (handle != null)
+            {
+                Image handleImage = handle.GetComponent<Image>();
+                handleImage.sprite = null;
+                handleImage.color = Gold;
+                slider.targetGraphic = handleImage;
+            }
+
+            return slider;
         }
 
         private static GameObject CreateDialog(Transform canvas, Sprite frameSprite, Sprite buttonSprite, Sprite portrait, out Text dialogText, out Button dialogButton)
@@ -1023,29 +1887,7 @@ namespace LenteraDirah.Editor
             return panel;
         }
 
-        private static GameObject CreateEndScreen(Transform canvas, Sprite panelSprite, Sprite buttonSprite, string panelName, string heading, Color headingColor,
-            out Text bodyText, out Button actionButton, string buttonLabel)
-        {
-            GameObject panel = CreateOverlay(canvas, panelName, new Color(0.03f, 0.03f, 0.06f, 0.9f));
-
-            RectTransform box = Place(NewRect("Box", panel.transform), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                Vector2.zero, new Vector2(1000f, 620f));
-            AddImage(box, panelSprite, new Color(0.09f, 0.09f, 0.17f, 0.97f), true);
-
-            RectTransform title = Place(NewRect("Heading", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                new Vector2(0f, 200f), new Vector2(900f, 90f));
-            AddText(title, heading, 62, headingColor, TextAnchor.MiddleCenter);
-
-            RectTransform body = Place(NewRect("Body", box), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-                new Vector2(0f, 30f), new Vector2(840f, 240f));
-            bodyText = AddText(body, string.Empty, 26, new Color(0.9f, 0.88f, 0.84f), TextAnchor.MiddleCenter);
-
-            actionButton = CreateButton(box, "ActionButton", buttonLabel, buttonSprite, new Vector2(0f, -210f), new Vector2(360f, 78f));
-
-            return panel;
-        }
-
-        private static Button CreateButton(Transform parent, string name, string label, Sprite sprite, Vector2 position, Vector2 size)
+        private static Button CreateButton(Transform parent, string name, string label, Sprite sprite, Vector2 position, Vector2 size, int fontSize = 28)
         {
             RectTransform rect = Place(NewRect(name, parent), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), position, size);
             Image image = AddImage(rect, sprite, Gold, true);
@@ -1062,7 +1904,7 @@ namespace LenteraDirah.Editor
             button.colors = colors;
 
             RectTransform labelRect = Stretch(NewRect("Label", rect));
-            Text labelText = AddText(labelRect, label, 28, new Color(0.07f, 0.07f, 0.14f), TextAnchor.MiddleCenter);
+            Text labelText = AddText(labelRect, label, fontSize, new Color(0.07f, 0.07f, 0.14f), TextAnchor.MiddleCenter);
             labelText.fontStyle = FontStyle.Bold;
 
             return button;
@@ -1239,6 +2081,21 @@ namespace LenteraDirah.Editor
             }
 
             property.stringValue = value;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void BindInt(UnityEngine.Object target, string fieldName, int value)
+        {
+            SerializedObject serialized = new SerializedObject(target);
+            SerializedProperty property = serialized.FindProperty(fieldName);
+
+            if (property == null)
+            {
+                Debug.LogError($"[LenteraDirah] Field '{fieldName}' tidak ditemukan pada {target.GetType().Name}.");
+                return;
+            }
+
+            property.intValue = value;
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 

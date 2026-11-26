@@ -47,6 +47,15 @@ namespace LenteraDirah
         public int Health { get; private set; }
         public bool IsInvulnerable => isInvulnerable;
 
+        /// <summary>0 = lentera padam, 1 = lentera penuh.</summary>
+        public float Brightness01 => Mathf.Clamp01(Energy / maxEnergy);
+
+        /// <summary>
+        /// Mekanik Rwa Bhineda: lentera terang membuat Bahula mudah terlihat
+        /// (deteksi +30%), lentera redup menyamarkan langkahnya (deteksi -30%).
+        /// </summary>
+        public float ExposureMultiplier => Mathf.Lerp(0.7f, 1.3f, Brightness01);
+
         private Rigidbody2D body;
         private Vector2 moveInput;
         private Vector2 facing = Vector2.down;
@@ -54,6 +63,7 @@ namespace LenteraDirah
         private float castBoost = 1f;
         private bool isInvulnerable;
         private string currentAnimation;
+        private float baseDecayPerSecond;
 
 #if UNITY_EDITOR
         private Vector2 scriptedInput;
@@ -81,12 +91,63 @@ namespace LenteraDirah
         private void Awake()
         {
             body = GetComponent<Rigidbody2D>();
+            baseDecayPerSecond = decayPerSecond;
             Energy = maxEnergy;
             Health = maxHealth;
         }
 
+        /// <summary>Diterapkan ulang saat misi dimulai agar pilihan kesulitan langsung berlaku.</summary>
+        public void ApplyDifficulty()
+        {
+            decayPerSecond = baseDecayPerSecond * DifficultySettings.DecayMultiplier;
+        }
+
+        /// <summary>Reset penuh saat level dimulai: posisi, energi, nyawa, dan state.</summary>
+        public void ResetForLevel(Vector3 spawnPosition)
+        {
+            StopAllCoroutines();
+
+            State = PlayerState.Idle;
+            moveInput = Vector2.zero;
+            facing = Vector2.down;
+            cooldownTimer = 0f;
+            castBoost = 1f;
+            isInvulnerable = false;
+            Energy = maxEnergy;
+            Health = maxHealth;
+
+            if (body == null)
+            {
+                body = GetComponent<Rigidbody2D>();
+            }
+
+            if (body != null)
+            {
+                body.position = spawnPosition;
+                body.linearVelocity = Vector2.zero;
+            }
+
+            transform.position = spawnPosition;
+
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = Color.white;
+            }
+
+            ApplyDifficulty();
+            ApplyEnergyToLantern();
+            PlayAnimation(true);
+
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.NotifyHealthChanged(Health);
+                GameManager.Instance.NotifyEnergyChanged(Energy);
+            }
+        }
+
         private void Start()
         {
+            ApplyDifficulty();
             ApplyEnergyToLantern();
 
             if (GameManager.Instance != null)
