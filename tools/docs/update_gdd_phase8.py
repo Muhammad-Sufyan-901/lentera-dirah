@@ -11,11 +11,10 @@ import sys
 from docx import Document
 from docx.oxml.ns import qn
 
-TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
-
-BASE = os.path.dirname(TOOLS_DIR)
-DOCX_PATH = os.path.join(BASE, "GDD", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.docx")
-HTML_PATH = os.path.join(BASE, "HTML Artifacts", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.html")
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE = os.path.join(ROOT, "docs")
+DOCX_PATH = os.path.join(BASE, "gdd", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.docx")
+HTML_PATH = os.path.join(BASE, "html", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.html")
 
 OLD_CHAPTER = "PENGEMBANGAN UAS"
 NEW_CHAPTER = "PENGEMBANGAN FASE BERIKUTNYA"

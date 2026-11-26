@@ -3,9 +3,10 @@
 
 import os
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE = os.path.join(ROOT, "docs")
 HTML_PATH = os.path.join(
-    BASE, "HTML Artifacts", "230030309_Muhammad_Sufyan_Daftar_Referensi_Assets_Lentera_Dirah.html"
+    BASE, "html", "230030309_Muhammad_Sufyan_Daftar_Referensi_Assets_Lentera_Dirah.html"
 )
 
 REPLACEMENTS = [
@@ -78,7 +79,7 @@ REPLACEMENTS = [
           <td>Gapura, beringin, pura meru, bale kulkul, pelinggih, penjor, backdrop menu, restyle Bahula</td>
           <td><b>CC0 1.0</b><br>(Public Domain)</td>
           <td>
-            &bull; <b>Generator:</b> <code>Game/Tools/generate_balinese_assets.py</code><br>
+            &bull; <b>Generator:</b> <code>tools/assets/generate_balinese_assets.py</code><br>
             &bull; <b>Lisensi:</b> <code>Game/Assets/_Project/Art/Environment/LICENSE_CC0.md</code>
           </td>
         </tr>""",
@@ -122,7 +123,7 @@ REPLACEMENTS = [
     (
         """      <li><b>Cara Mengunduh Aset Kenney.nl Secara Gratis:</b> Buka tautan paket di Kenney.nl (misalnya <a class="ref-link" href="https://kenney.nl/assets/tiny-town" target="_blank">https://kenney.nl/assets/tiny-town</a>), lalu klik tombol biru <b>&ldquo;Download (Free)&rdquo;</b> untuk langsung mendapatkan arsip <code>.zip</code> tanpa perlu membuat akun.</li>""",
         """      <li><b>Cara Mengunduh BGM Gamelan (Public Domain):</b> Buka halaman berkas <a class="ref-link" href="https://commons.wikimedia.org/wiki/File:Gend%C3%A9r_Wayang_(1928).ogg" target="_blank">Gend&eacute;r Wayang (1928)</a> di Wikimedia Commons, lalu klik tautan <b>&ldquo;Original file&rdquo;</b> untuk mengunduh <code>Gend&eacute;r Wayang (1928).ogg</code> tanpa biaya dan tanpa atribusi wajib.</li>
-      <li><b>Aset Lingkungan Bali:</b> tidak diunduh dari pihak ketiga, melainkan dibuat dengan skrip <code>Game/Tools/generate_balinese_assets.py</code> (Python standard library) dan dilepas sebagai CC0 1.0.</li>""",
+      <li><b>Aset Lingkungan Bali:</b> tidak diunduh dari pihak ketiga, melainkan dibuat dengan skrip <code>tools/assets/generate_balinese_assets.py</code> (Python standard library) dan dilepas sebagai CC0 1.0.</li>""",
     ),
     # 3.1 Bahula
     (
@@ -195,7 +196,7 @@ REPLACEMENTS = [
 
 ENVIRONMENT_SECTION = """    <h2 class="section-title" id="ast-4-4">4.4 Aset Lingkungan Budaya Bali &amp; Kostum Bahula (Orisinal, CC0)</h2>
     <p>
-      Untuk memperkuat identitas budaya Bali, prototipe ini menambahkan aset lingkungan orisinal yang digambar khusus (bukan aset pihak ketiga) melalui <code>Game/Tools/generate_balinese_assets.py</code>. Seluruh berkas dilepas dengan lisensi <b>CC0 1.0</b> (<code>Game/Assets/_Project/Art/Environment/LICENSE_CC0.md</code>).
+      Untuk memperkuat identitas budaya Bali, prototipe ini menambahkan aset lingkungan orisinal yang digambar khusus (bukan aset pihak ketiga) melalui <code>tools/assets/generate_balinese_assets.py</code>. Seluruh berkas dilepas dengan lisensi <b>CC0 1.0</b> (<code>Game/Assets/_Project/Art/Environment/LICENSE_CC0.md</code>).
     </p>
     <table class="data-table">
       <thead>
@@ -249,7 +250,7 @@ ENVIRONMENT_SECTION = """    <h2 class="section-title" id="ast-4-4">4.4 Aset Lin
       </tbody>
     </table>
     <p>
-      <b>Kostum Bahula.</b> Sprite Bahula dari paket Ninja Adventure di-<i>restyle</i> melalui <code>Game/Tools/restyle_bahula_balinese.py</code> menjadi kemeja dan kamen putih (<code>#F4EFE6</code>), udeng coklat (<code>#6B4A2F</code>), serta sabuk emas (<code>#FFB84D</code>). Karena asal sprite adalah CC0, hasil modifikasi juga dilepas CC0 (<code>Game/Assets/_Project/Art/Characters/LICENSE_Bahula_Restyle.md</code>).
+      <b>Kostum Bahula.</b> Sprite Bahula dari paket Ninja Adventure di-<i>restyle</i> melalui <code>tools/assets/restyle_bahula_balinese.py</code> menjadi kemeja dan kamen putih (<code>#F4EFE6</code>), udeng coklat (<code>#6B4A2F</code>), serta sabuk emas (<code>#FFB84D</code>). Karena asal sprite adalah CC0, hasil modifikasi juga dilepas CC0 (<code>Game/Assets/_Project/Art/Characters/LICENSE_Bahula_Restyle.md</code>).
     </p>
 
 """

@@ -4,7 +4,7 @@
 White shirt/sarong + brown udeng (head wrap) + gold sash, keeping the
 Ninja Adventure animation frames intact.
 
-Source (pristine, CC0): Game/Tools/source/*_original.png
+Source (pristine, CC0): tools/assets/source/*_original.png
 Output: Game/Assets/_Project/Art/Characters/*.png
 
 Pure Python standard library (zlib + struct).

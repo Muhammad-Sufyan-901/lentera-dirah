@@ -2,6 +2,9 @@
 
 **Berkas:** `Lentera Dirah - Gameplay (Menang & Kalah).mp4`
 
+> Rekaman ini berasal dari **Tugas 2**. Video presentasi + demo final Tugas 3 mengikuti
+> `docs/plan/SKENARIO_PRESENTASI_TUGAS3.md` dan belum menggantikan berkas di atas.
+
 | Atribut | Nilai |
 |---|---|
 | Resolusi | 1280 × 720 (16:9) |
