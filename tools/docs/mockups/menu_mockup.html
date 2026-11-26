@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; width: 1200px; height: 675px; overflow: hidden; }
+  body { background: #0b0c16; font-family: Arial, Helvetica, sans-serif; }
+  .frame {
+    width: 1200px; height: 675px; background: #121324;
+    border: 3px solid #c99738; display: flex; flex-direction: column;
+  }
+  .topbar {
+    height: 64px; background: #1c1d36; border-bottom: 2px solid #c99738;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 26px; flex: 0 0 64px;
+  }
+  .brand { color: #ffb84d; font-size: 22px; font-weight: bold; letter-spacing: 2px; }
+  .brand span { color: #e8e8f0; font-size: 13px; font-weight: normal; letter-spacing: 0; margin-left: 12px; }
+  .top-meta { color: #64c8ff; font-size: 12px; letter-spacing: 1px; text-align: right; line-height: 1.5; }
+  .content {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    position: relative; padding: 18px 40px;
+  }
+  .scene-label {
+    position: absolute; top: 14px; left: 0; right: 0; text-align: center;
+    color: #8b7a5a; font-size: 11px; letter-spacing: 2px;
+  }
+  .panel {
+    width: 760px; border: 3px dashed #c99738; background: rgba(0,0,0,0.28);
+    padding: 20px 30px 22px 30px; text-align: center;
+  }
+  .eyebrow { color: #64c8ff; font-size: 11px; letter-spacing: 3px; margin-bottom: 8px; }
+  .title { color: #ffb84d; font-size: 54px; font-weight: bold; letter-spacing: 3px; line-height: 1.05; }
+  .subtitle { color: #e8e8f0; font-size: 22px; margin-top: 4px; }
+  .body { color: #bdbdcc; font-size: 16px; line-height: 1.45; margin: 12px auto 16px auto; max-width: 660px; }
+  .btn {
+    display: inline-block; border: 2px solid #ffb84d; color: #ffd166;
+    background: rgba(255,184,77,0.08); padding: 8px 22px; font-size: 18px;
+    font-weight: bold; letter-spacing: 1px;
+  }
+  .btn.primary { background: #ffb84d; color: #1a1a1a; padding: 10px 46px; font-size: 20px; margin-bottom: 12px; }
+  .row { display: flex; justify-content: center; gap: 14px; }
+  .btn.minor { padding: 7px 26px; font-size: 16px; margin-top: 12px; }
+  .bottombar {
+    height: 52px; background: #1c1d36; border-top: 2px solid #c99738;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 26px; color: #ffd166; font-size: 13px; flex: 0 0 52px;
+  }
+  .bottombar .muted { color: #8f8fa6; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="topbar">
+      <div class="brand">LENTERA DIRAH <span>Lontar Mpu Bharada</span></div>
+      <div class="top-meta">MENU UTAMA<br>3 WILAYAH &middot; 9 LONTAR SUCI</div>
+    </div>
+    <div class="content">
+      <div class="scene-label">GAPURA CANDI BENTAR &middot; POHON BERINGIN &middot; PENJOR</div>
+      <div class="panel">
+        <div class="eyebrow">PETUALANGAN TIGA WILAYAH</div>
+        <div class="title">LENTERA DIRAH</div>
+        <div class="subtitle">Lontar Mpu Bharada</div>
+        <div class="body">Jelajahi Desa Girah, Hutan Bambu Lemah Tulis, dan Pelataran Setra Gandamayu.<br>Kumpulkan 3 Lontar Suci di tiap wilayah dan sucikan Altarnya.</div>
+        <div class="btn primary">MULAI BERMAIN</div>
+        <div class="row">
+          <div class="btn">CARA BERMAIN</div>
+          <div class="btn">PENGATURAN</div>
+          <div class="btn">KREDIT</div>
+        </div>
+        <div class="btn minor">KELUAR</div>
+      </div>
+    </div>
+    <div class="bottombar">
+      <span>RWA BHINEDA</span>
+      <span class="muted">terang dan gelap saling menyeimbangkan</span>
+    </div>
+  </div>
+</body>
+</html>

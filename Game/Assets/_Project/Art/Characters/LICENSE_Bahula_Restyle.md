@@ -13,7 +13,7 @@ Modifikasi pada branch `feature/gamelan-bgm-balinese-character`:
 - Kumis/jenggot → dihaluskan agar wajah tampak muda (sesuai tokoh Bahula)
 - Kulit, mata, dan outline dipertahankan
 
-Proses recolor dilakukan oleh skrip reproducible `Game/Tools/restyle_bahula_balinese.py`
-menggunakan sprite asli yang disimpan di `Game/Tools/source/` (di luar `Assets/`).
+Proses recolor dilakukan oleh skrip reproducible `tools/assets/restyle_bahula_balinese.py`
+menggunakan sprite asli yang disimpan di `tools/assets/source/` (di luar `Assets/`).
 
 Karena asal sprite adalah CC0, hasil modifikasi ini juga dilepas **CC0 1.0**.

@@ -30,13 +30,17 @@ Dibuat dengan **Unity 6000.6.9f1** + **URP 17.6 (2D Lights)** untuk mata kuliah 
 ```
 .
 ├── Game/                      # Proyek Unity (dibuka lewat Unity Hub)
-│   ├── Assets/_Project/       # Art, Audio, Prefabs, Scenes, Scripts
+│   ├── Assets/_Project/       # Art, Animation, Audio, Prefabs, Scenes, Scripts (+ asmdef)
 │   ├── Docs/                  # Screenshot hasil render
 │   ├── Packages/  ProjectSettings/
-│   └── Builds/macOS/          # executable .app (tidak di-commit, build lokal)
-├── Documents/                 # GDD, Laporan Studi Literatur, Referensi Aset
-├── IMPLEMENTATION_PLAN.md     # Rencana & status 6 fase
-└── README_GAMEPLAY.md         # Panduan main, checklist rubrik, build, skenario video
+│   └── Builds/                # executable .app hasil build (tidak di-commit)
+├── docs/                      # GDD, laporan, HTML artifact, rencana proyek
+│   ├── gdd/  laporan/  html/
+│   ├── plan/                  # IMPLEMENTATION_PLAN, REVISI_DOKUMEN, skenario presentasi
+│   └── panduan-gameplay.md    # cara jalan, rubrik, build, skenario video
+├── tools/                     # skrip Python: assets/ (generator aset), docs/ (generator dokumen)
+├── media/gameplay/            # rekaman gameplay (berkas .mp4 tidak di-commit)
+└── dist/                      # arsip zip distribusi (tidak di-commit)
 ```
 
 ## Menjalankan
@@ -58,13 +62,13 @@ Kontrol: `WASD`/panah bergerak · `SPACE` Holy Light Burst · `E` lanjut dialog.
     -executeMethod LenteraDirah.Editor.PlayModeSmokeTest.Run -logFile -
   ```
 
-Detail lengkap: [`README_GAMEPLAY.md`](README_GAMEPLAY.md) · rencana fase: [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md)
+Detail lengkap: [`docs/panduan-gameplay.md`](docs/panduan-gameplay.md) · rencana fase: [`docs/plan/IMPLEMENTATION_PLAN.md`](docs/plan/IMPLEMENTATION_PLAN.md)
 
 ## Aset & Lisensi
 
 - [**Ninja Adventure Asset Pack**](https://github.com/pixel-boy/NinjaAdventure) — Pixel-Boy & AAA, **CC0 1.0** (karakter, monster, item, tileset, UI, font, SFX, BGM). Teks lisensi: `Game/Assets/_Project/LICENSE_NinjaAdventure_CC0.txt`.
-- **Aset lingkungan Bali** (gapura, beringin, meru, bale kulkul, pelinggih, penjor) — dibuat khusus untuk proyek ini via `Game/Tools/generate_balinese_assets.py`, dilepas **CC0 1.0** (`Game/Assets/_Project/Art/Environment/LICENSE_CC0.md`).
+- **Aset lingkungan Bali** (gapura, beringin, meru, bale kulkul, pelinggih, penjor) — dibuat khusus untuk proyek ini via `tools/assets/generate_balinese_assets.py`, dilepas **CC0 1.0** (`Game/Assets/_Project/Art/Environment/LICENSE_CC0.md`).
 - **BGM** — *Gendér Wayang* (1928), Gamelan Gender Wayang Bali, **Public Domain**, sumber [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Gend%C3%A9r_Wayang_(1928).ogg); rincian di `Game/Assets/_Project/Audio/BGM/LICENSE_BGM.md`.
-- **Restyle Bahula** — turunan CC0 dari Ninja Adventure, dimodifikasi via `Game/Tools/restyle_bahula_balinese.py` (`Art/Characters/LICENSE_Bahula_Restyle.md`).
+- **Restyle Bahula** — turunan CC0 dari Ninja Adventure, dimodifikasi via `tools/assets/restyle_bahula_balinese.py` (`Art/Characters/LICENSE_Bahula_Restyle.md`).
 - **Universal Render Pipeline 2D Lights** — Unity Technologies (Unity Companion License).
 - Kode game pada repository ini ditulis untuk keperluan akademik.

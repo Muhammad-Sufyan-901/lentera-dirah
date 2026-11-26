@@ -5,10 +5,10 @@ Branch: `docs/gdd-audit`
 
 Dokumen yang disesuaikan:
 
-- `Documents/GDD/…GDD….docx`
-- `Documents/GDD/…GDD….pdf`
-- `Documents/HTML Artifacts/…GDD….html`
-- `Documents/HTML Artifacts/…Daftar_Referensi_Assets….html`
+- `docs/gdd/…GDD….docx`
+- `docs/gdd/…GDD….pdf`
+- `docs/html/…GDD….html`
+- `docs/html/…Daftar_Referensi_Assets….html`
 
 Laporan Studi Literatur **tidak diubah** karena tidak memuat klaim teknis implementasi.
 
@@ -75,8 +75,8 @@ Hanya bagian yang **tidak lagi sesuai** dengan game yang diubah. Seluruh nilai m
 
 Skrip perubahan disimpan agar dapat diaudit/diulang:
 
-- `Documents/tools/update_gdd.py`
-- `Documents/tools/update_assets_doc.py`
+- `tools/docs/update_gdd.py`
+- `tools/docs/update_assets_doc.py`
 
 Skrip bersifat sekali-jalan terhadap dokumen asli (mengandalkan teks lama sebagai anchor), sehingga untuk regenerasi gunakan dokumen versi sebelum revisi.
 

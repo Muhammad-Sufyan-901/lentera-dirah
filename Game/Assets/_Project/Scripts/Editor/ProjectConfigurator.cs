@@ -13,7 +13,7 @@ namespace LenteraDirah.Editor
     {
         public const string ProjectRoot = "Assets/_Project";
         public const string ArtRoot = ProjectRoot + "/Art";
-        public const string AnimRoot = ProjectRoot + "/Art/Animations";
+        public const string AnimRoot = ProjectRoot + "/Animation";
         public const string MaterialPath = ProjectRoot + "/Art/Materials/SpriteLit.mat";
         public const string BahulaSheet = ArtRoot + "/Characters/Bahula_SpriteSheet.png";
         public const string SpiritSheet = ArtRoot + "/Monsters/ShadowSpirit_SpriteSheet.png";
@@ -59,8 +59,8 @@ namespace LenteraDirah.Editor
                 ArtRoot + "/Tilesets",
                 ArtRoot + "/Environment",
                 ArtRoot + "/UI",
-                ArtRoot + "/Animations",
                 ArtRoot + "/Materials",
+                AnimRoot,
                 ProjectRoot + "/Audio/BGM",
                 ProjectRoot + "/Audio/SFX",
                 ProjectRoot + "/Prefabs",

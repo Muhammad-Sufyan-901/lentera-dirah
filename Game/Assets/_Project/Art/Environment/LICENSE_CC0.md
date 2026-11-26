@@ -12,7 +12,7 @@ Seluruh berkas PNG di folder `Assets/_Project/Art/Environment/`:
 - `Penjor.png`
 
 dibuat khusus untuk proyek **Lentera Dirah: Lontar Mpu Bharada** melalui generator
-`Game/Tools/generate_balinese_assets.py` (Python standard library, tanpa aset pihak ketiga).
+`tools/assets/generate_balinese_assets.py` (Python standard library, tanpa aset pihak ketiga).
 
 Aset-aset tersebut dilepas ke **domain publik** di bawah
 **Creative Commons Zero v1.0 Universal (CC0 1.0)** —

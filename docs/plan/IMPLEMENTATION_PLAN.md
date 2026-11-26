@@ -28,10 +28,10 @@ Legenda: `[x]` selesai & terverifikasi · `[~]` sebagian · `[ ]` belum.
 
 ## Fase 2 — Core System & State Management
 
-- [x] `GameManager.cs` — FSM `MainMenu → IntroDialog → Playing → Victory / GameOver`, singleton, event `StateChanged/LontarChanged/HealthChanged/EnergyChanged/HintChanged`, dialog Mpu Bharada verbatim GDD, restart scene
-- [x] `AudioManager.cs` — BGM loop + 5 SFX (`Lontar`, `Burst`, `Oil`, `Hurt`, `Victory`)
-- [x] `UIManager.cs` — panel Menu/Dialog/HUD/Victory/GameOver, 3 ikon nyawa, bar energi, counter Lontar, baris petunjuk kearifan lokal, tombol interaktif
-- [x] User Flow GDD Bab VI terimplementasi (klik **MULAI PENYUCIAN** → dialog → **MENGERTI (E)** / `E` → gameplay)
+- [x] `GameManager.cs` — FSM `MainMenu → IntroDialog → Playing ⇄ Paused → Victory / GameOver`, singleton, event `StateChanged/LontarChanged/HealthChanged/EnergyChanged/HintChanged`, dialog Mpu Bharada verbatim GDD, timer, gelar, rekor waktu, restart scene
+- [x] `AudioManager.cs` — BGM loop + 5 SFX (`Lontar`, `Burst`, `Oil`, `Hurt`, `Victory`) + volume BGM/SFX tersimpan (`PlayerPrefs`)
+- [x] `UIManager.cs` — panel Menu/Dialog/HUD/Jeda/Victory/GameOver/Pengaturan/Kredit, 3 ikon nyawa, bar energi, counter Lontar, timer, status cahaya, tombol interaktif
+- [x] User Flow GDD Bab VI terimplementasi (**MULAI BERMAIN** → pilih kesulitan → dialog → gameplay); revisi tiga level pada Fase 8
 
 ## Fase 3 — Karakter Pemain & Mekanik Lentera
 
@@ -62,7 +62,7 @@ Legenda: `[x]` selesai & terverifikasi · `[~]` sebagian · `[ ]` belum.
 - [x] Kompilasi bersih — **0 `error CS`** (batchmode)
 - [x] Scene `Assets/_Project/Scenes/LenteraDirah_Girah.unity` dibuat & masuk **Build Settings**
 - [x] Build macOS berhasil: `Game/Builds/macOS/LenteraDirah.app`
-- [x] **Automated play-mode smoke test 19/19 PASS**:
+- [x] **Automated play-mode smoke test (Tugas 2) 19/19 PASS**:
   - [x] 3 musuh, player, GameManager terpasang
   - [x] `MainMenu → IntroDialog → Playing`, HUD aktif, Main Menu non-aktif
   - [x] Light decay terukur **2.40%/1.2 dtk**, radius menyusut **5.99 → 3.79**
@@ -72,6 +72,36 @@ Legenda: `[x]` selesai & terverifikasi · `[~]` sebagian · `[ ]` belum.
   - [x] 3 Lontar terkumpul → segel Altar terbuka → **Victory** + panel tampil
 - [x] Review visual: menu, dialog, gameplay (`Game/Docs/preview_menu.png`, `preview_dialog.png`, `preview_gameplay.png`)
 - [x] `README_GAMEPLAY.md` — cara menjalankan, checklist rubrik, build, skenario video demo
+
+## Fase 7 — Finalisasi Prototipe (Tugas 3)
+
+- [x] **Menu Pengaturan & Jeda** — slider BGM/SFX (persisten via `PlayerPrefs`), tombol layar penuh, pilihan kesulitan (dipindah ke halaman khusus pada Fase 8), `ESC` membuka/menutup Jeda; panel Jeda berisi Lanjutkan / Pengaturan / Ke Menu Utama
+- [x] **Layar Kredit** — atribusi Ninja Adventure (CC0), Gendér Wayang 1928 (Public Domain), aset lingkungan Bali orisinal (CC0), URP 2D Lights
+- [x] **Tiga tingkat kesulitan** — Mudah/Normal/Sulit mengubah laju energi (×0.75/×1.00/×1.35), kecepatan musuh (×0.85/×1.00/×1.15), deteksi musuh (×0.80/×1.00/×1.25); diterapkan saat misi dimulai
+- [x] **Mekanik 3 — Rwa Bhineda Exposure** — radius deteksi musuh = basis × kesulitan × `Lerp(0.7, 1.3, energi/100)`; HUD menampilkan TERANG/SEIMBANG/REDUP
+- [x] **Hasil akhir, gelar, rekor** — timer HUD, panel hasil (waktu/nyawa/energi), gelar Penyuci Agung / Murid Teladan / Pejalan Malam, rekor skor (direvisi menjadi skor total pada Fase 8)
+- [x] **Save progres tidak diimplementasikan** — sesi permainan ±2 menit; persistensi dibatasi pada pengaturan, kesulitan, dan rekor
+- [x] **Uji otomatis diperluas — 40/40 PASS** (panel baru, Paused/timeScale, wiring Pengaturan dari Jeda, volume BGM, exposure ±30%, penerapan kesulitan, gelar & rekor)
+- [x] **Build ulang** — `Game/Builds/macOS/LenteraDirah.app` dan `Game/Builds/Windows/LenteraDirah.exe`; build macOS dijalankan dan berjalan normal
+- [x] **Screenshot baru** — `preview_settings.png`, `preview_credits.png`, `preview_pause.png`, `preview_victory.png`
+- [x] **Dokumen final** — GDD HTML/DOCX/PDF, README, README_GAMEPLAY, skenario presentasi
+
+---
+
+## Fase 8 — Tiga Level, Halaman Kesulitan, & Skor (revisi final)
+
+- [x] **Tiga level dalam satu scene** — `Level_1_DesaGirahBagianLuar`, `Level_2_HutanBambuLemahTulis`, `Level_3_PelataranSetraGandamayu`; hanya satu root aktif, level lain diaktifkan oleh `LevelManager`
+- [x] **Dua peta baru** — layout prosedural Hutan Bambu (14 rect) dan Pelataran Setra (16 rect), tema props berbeda (hutan vs pura/setra), warna tanah berbeda
+- [x] **Kesulitan per level** — 3 / 4 / 5 musuh, 3 Lontar + 3 Minyak + altar per level, skor terakumulasi
+- [x] **Halaman Pilih Kesulitan** — `MAIN MENU → MULAI BERMAIN → DifficultySelect`; pilihan Mudah/Normal/Sulit + pengali skor; dihapus dari panel Pengaturan
+- [x] **Alur hasil level** — `Victory` menampilkan skor level, skor total, gelar, dan tombol **LEVEL BERIKUTNYA**; level 3 menjadi **SELESAI**
+- [x] **Game Over** — menampilkan skor total, **COBA LAGI** (mengulang level saat ini), **MENU UTAMA**
+- [x] **Reset per level** — player (energi/nyawa/posisi), musuh (state/posisi), item (diaktifkan ulang), altar (tersegel lagi), kamera snap
+- [x] **HUD** — `LEVEL n/3 — Nama`, `SKOR`, timer, status cahaya
+- [x] **Uji otomatis 74/74 PASS** — alur menu→kesulitan→3 level→hasil, skor, reset, pindah level, game over/retry, rekor
+- [x] **Screenshot baru** — `preview_difficulty.png`, `preview_level2.png`, `preview_level2_world.png`, `preview_level3.png`, `preview_level3_world.png`, `preview_gameover.png`, `preview_victory3.png`
+- [x] **Build ulang** — macOS `.app` dan Windows `.exe`; build macOS dijalankan
+- [x] **Dokumen** — GDD HTML/DOCX/PDF, README, README_GAMEPLAY, skenario presentasi diperbarui
 
 ---
 

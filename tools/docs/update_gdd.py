@@ -13,9 +13,10 @@ import sys
 
 from docx import Document
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DOCX_PATH = os.path.join(BASE, "GDD", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.docx")
-HTML_PATH = os.path.join(BASE, "HTML Artifacts", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.html")
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE = os.path.join(ROOT, "docs")
+DOCX_PATH = os.path.join(BASE, "gdd", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.docx")
+HTML_PATH = os.path.join(BASE, "html", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.html")
 
 # --------------------------------------------------------------------------
 # HTML: exact replacements (each anchor must appear exactly once)
@@ -112,7 +113,7 @@ HTML_REPLACEMENTS = [
           <td>Gapura, beringin, meru, bale kulkul, pelinggih, penjor, backdrop menu, restyle Bahula</td>
           <td><b>CC0 1.0</b></td>
           <td>
-            &bull; <b>Generator:</b> <code>Game/Tools/generate_balinese_assets.py</code><br>
+            &bull; <b>Generator:</b> <code>tools/assets/generate_balinese_assets.py</code><br>
             &bull; <b>Lisensi:</b> <code>Art/Environment/LICENSE_CC0.md</code>
           </td>
         </tr>""",
@@ -219,7 +220,7 @@ HTML_REPLACEMENTS = [
     # 8.1 folder structure
     (
         "<li><code>Assets/_Project/Art/</code>, <code>Assets/_Project/Audio/</code>, dan <code>Assets/_Project/Scenes/</code> &mdash; Menyimpan sprite, tilemap, audio, dan scene utama.</li>",
-        "<li><code>Assets/_Project/Art/</code> (<i>Characters</i>, <i>Monsters</i>, <i>Items</i>, <i>Tilesets</i>, <i>Environment</i>, <i>UI</i>, <i>Animations</i>, <i>Materials</i>), <code>Assets/_Project/Audio/</code> (<i>BGM</i>, <i>SFX</i>), dan <code>Assets/_Project/Scenes/</code> &mdash; Menyimpan sprite, tilemap, audio, dan scene utama.</li>\n      <li><code>Assets/_Project/Scripts/Editor/</code> &mdash; Berisi <code>LenteraDirahSceneBuilder.cs</code>, <code>ProjectConfigurator.cs</code>, <code>PlayModeSmokeTest.cs</code>, dan <code>PlayModePreviewCapture.cs</code> (otomasi konfigurasi aset, perakitan scene, build macOS, serta pengujian).</li>",
+        "<li><code>Assets/_Project/Art/</code> (<i>Characters</i>, <i>Monsters</i>, <i>Items</i>, <i>Tilesets</i>, <i>Environment</i>, <i>UI</i>, <i>Materials</i>), <code>Assets/_Project/Animation/</code> (animator &amp; klip), <code>Assets/_Project/Audio/</code> (<i>BGM</i>, <i>SFX</i>), dan <code>Assets/_Project/Scenes/</code> &mdash; Menyimpan sprite, tilemap, animasi, audio, dan scene utama.</li>\n      <li><code>Assets/_Project/Scripts/Editor/</code> &mdash; Berisi <code>LenteraDirahSceneBuilder.cs</code>, <code>ProjectConfigurator.cs</code>, <code>PlayModeSmokeTest.cs</code>, dan <code>PlayModePreviewCapture.cs</code> (otomasi konfigurasi aset, perakitan scene, build macOS, serta pengujian).</li>",
     ),
 ]
 
@@ -230,7 +231,7 @@ COSTUME_PARAGRAPH = """    <p>
 """
 
 ENVIRONMENT_PARAGRAPH = """    <p>
-      <b>Aset lingkungan budaya Bali (orisinal, CC0 1.0).</b> Selain aset paket Ninja Adventure, prototipe ini memakai aset lingkungan yang digambar khusus melalui <code>Game/Tools/generate_balinese_assets.py</code> dan dilepas dengan lisensi CC0:
+      <b>Aset lingkungan budaya Bali (orisinal, CC0 1.0).</b> Selain aset paket Ninja Adventure, prototipe ini memakai aset lingkungan yang digambar khusus melalui <code>tools/assets/generate_balinese_assets.py</code> dan dilepas dengan lisensi CC0:
     </p>
     <ul>
       <li><code>Gapura_CandiBentar.png</code> (96&times;80) dan <code>Gapura_Menu.png</code> (192&times;160) &mdash; gapura keluar desa, gerbang sektor utara, serta latar panel Main Menu.</li>
@@ -420,7 +421,7 @@ def apply_docx():
     art_bullet = find_paragraph(doc, "Assets/_Project/Art/, Assets/_Project/Audio/")
     set_paragraph_text(
         art_bullet,
-        "Assets/_Project/Art/ (Characters, Monsters, Items, Tilesets, Environment, UI, Animations, Materials), Assets/_Project/Audio/ (BGM, SFX), dan Assets/_Project/Scenes/ — Menyimpan sprite, tilemap, audio, dan scene utama.",
+        "Assets/_Project/Art/ (Characters, Monsters, Items, Tilesets, Environment, UI, Materials), Assets/_Project/Animation/ (animator & klip), Assets/_Project/Audio/ (BGM, SFX), dan Assets/_Project/Scenes/ — Menyimpan sprite, tilemap, animasi, audio, dan scene utama.",
     )
 
     # --- tables -----------------------------------------------------------
@@ -454,7 +455,7 @@ def apply_docx():
                   "Gapura, beringin, meru, bale kulkul, pelinggih, penjor, backdrop menu, restyle Bahula")
     set_cell_text(repo.rows[3].cells[4], "CC0 1.0")
     set_cell_text(repo.rows[3].cells[5],
-                  "• Generator: Game/Tools/generate_balinese_assets.py\n• Lisensi: Art/Environment/LICENSE_CC0.md")
+                  "• Generator: tools/assets/generate_balinese_assets.py\n• Lisensi: Art/Environment/LICENSE_CC0.md")
     delete_row(repo, 5)
     delete_row(repo, 4)
     set_cell_text(repo.rows[4].cells[0], "4")
@@ -526,7 +527,7 @@ def apply_docx():
     bold_run.bold = True
     intro.add_run(
         "Selain aset paket Ninja Adventure, prototipe ini memakai aset lingkungan yang digambar khusus "
-        "melalui Game/Tools/generate_balinese_assets.py dan dilepas dengan lisensi CC0:"
+        "melalui tools/assets/generate_balinese_assets.py dan dilepas dengan lisensi CC0:"
     )
 
     bullets = [

@@ -6,9 +6,10 @@ import os
 from docx import Document
 from docx.oxml.ns import qn
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DOCX_PATH = os.path.join(BASE, "GDD", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.docx")
-HTML_PATH = os.path.join(BASE, "HTML Artifacts", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.html")
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE = os.path.join(ROOT, "docs")
+DOCX_PATH = os.path.join(BASE, "gdd", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.docx")
+HTML_PATH = os.path.join(BASE, "html", "230030309_Muhammad_Sufyan_Game_Design_Document_GDD_Lentera_Dirah.html")
 
 MENU_PARAGRAPH = """    <p>
       Layar Main Menu menyediakan tiga tombol: <b>MULAI PENYUCIAN</b> untuk memulai alur permainan,
