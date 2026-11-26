@@ -42,6 +42,14 @@ namespace LenteraDirah
             }
         }
 
+        /// <summary>Kembalikan altar ke kondisi tersegel saat level dimuat ulang.</summary>
+        public void ResetAltar()
+        {
+            isUnsealed = false;
+            pulseTime = 0f;
+            ApplySealedVisual();
+        }
+
         public void Unseal()
         {
             if (isUnsealed)

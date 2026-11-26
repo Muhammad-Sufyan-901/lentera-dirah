@@ -3,27 +3,45 @@
 Prototipe game 2D top-down bertema budaya Bali (*Calonarang* / filosofi *Rwa Bhineda*).
 Dibuat dengan **Unity 6000.6.9f1** + **URP 17.6 (2D Lights)** untuk mata kuliah Pengembangan Permainan Digital — ITB STIKOM Bali.
 
-> Jelajahi kegelapan Desa Girah sebagai **Bahula**, tenangkan **Bayangan Wabah** dengan cahaya Lentera Suci, dan kembalikan **3 Lontar Kuno** ke **Altar Penyucian** tanpa kekerasan.
+> Jelajahi tiga wilayah sebagai **Bahula**, tenangkan **Bayangan Wabah** dengan cahaya Lentera Suci, dan kembalikan **3 Lontar Kuno** ke **Altar Penyucian** di setiap wilayah tanpa kekerasan.
 
 ![Gameplay](Game/Docs/preview_gameplay.png)
 
 ## Fitur
 
-- **Core loop** `Explore → Evade & Stun → Collect → Purify`
-- **FSM 3 level**: `GameManager` (MainMenu/IntroDialog/Playing/Victory/GameOver), `PlayerController` (Idle/Walking/CastingLight/Hurt), `EnemyShadowAI` (Patrol/Chase/Stunned)
-- **Mekanik 1** — Sacred Lontar Collection & Altar Seal: 3 Lontar (Usada, Dharma, Rwa Bhineda) membuka segel Altar
+- **Alur final**: `Main Menu → Pilih Kesulitan → Level 1/2/3 → Hasil (skor) → Level Berikutnya / Menu`
+- **3 level dengan 2 peta baru**: **Desa Girah Bagian Luar**, **Hutan Bambu Lemah Tulis**, **Pelataran Setra Gandamayu** — masing-masing punya layout, altar, 3 Lontar, 3 Minyak, dan 4–5 Bayangan Wabah
+- **Core loop per level** `Explore → Evade & Stun → Collect → Purify`
+- **FSM 3 tingkat**: `GameManager` (MainMenu/DifficultySelect/IntroDialog/Playing/Paused/Victory/GameOver), `PlayerController` (Idle/Walking/CastingLight/Hurt), `EnemyShadowAI` (Patrol/Chase/Stunned)
+- **Mekanik 1** — Sacred Lontar Collection & Altar Seal: 3 Lontar per level membuka segel Altar setempat
 - **Mekanik 2** — Dynamic Lantern & Holy Light Burst: energi menyusut **2%/dtk** (radius `Light 2D` 6.0→1.8), Minyak Obor **+35%**, `SPACE` = burst **-15%** energi, cooldown **4 dtk**, stun radius **3.5** selama **3 dtk**
+- **Mekanik 3** — Rwa Bhineda Exposure: lentera terang membuat deteksi musuh hingga **+30%**, lentera redup menyamarkan hingga **-30%**
+- **Halaman Pilih Kesulitan** setelah **MULAI BERMAIN**: Mudah / Normal / Sulit (pengali decay, kecepatan, deteksi, dan skor)
+- **Skor & gelar**: skor level dari waktu + nyawa + sisa energi × pengali kesulitan; gelar Penyuci Agung / Murid Teladan / Pejalan Malam; skor total dan rekor tersimpan
+- **Menu Pengaturan + Jeda**: slider BGM/SFX, layar penuh; `Esc` menjeda permainan
+- **Layar Kredit**: atribusi aset dan lisensi
+- Persistensi terbatas pada pengaturan dan rekor skor (`PlayerPrefs`) — tanpa save progres
 - Collision solid (TilemapCollider2D) & trigger (item, altar), kamera smooth-follow, animasi 4 arah, SFX 5 event
 - **Bahula bergaya Bali**: kemeja/kamen putih dengan sabuk emas dan **udeng coklat** (hasil restyle sprite 4 arah, lihat `Art/Characters/LICENSE_Bahula_Restyle.md`)
 - **BGM gamelan Bali**: rekaman *Gendér Wayang* (1928) berstatus public domain, loop selama permainan
 - **Unsur budaya Bali**: gapura/candi bentar sebagai pintu keluar desa & gerbang sektor utara, pohon beringin berakar gantung, pura meru bertingkat, bale kulkul, pelinggih, dan penjor — plus latar gapura/beringin/penjor di main menu
 - **Automasi editor**: seluruh scene dirakit 1 klik dari menu `Tools → Lentera Dirah`
 
-| Menu | Dialog | Gameplay |
+| Menu | Pilih Kesulitan | Pengaturan |
 |---|---|---|
-| ![Menu](Game/Docs/preview_menu.png) | ![Dialog](Game/Docs/preview_dialog.png) | ![Gameplay](Game/Docs/preview_gameplay.png) |
+| ![Menu](Game/Docs/preview_menu.png) | ![Kesulitan](Game/Docs/preview_difficulty.png) | ![Pengaturan](Game/Docs/preview_settings.png) |
 
-![Peta Desa Girah](Game/Docs/preview_world.png)
+| Desa Girah | Hutan Bambu Lemah Tulis | Pelataran Setra Gandamayu |
+|---|---|---|
+| ![Level 1](Game/Docs/preview_world.png) | ![Level 2](Game/Docs/preview_level2_world.png) | ![Level 3](Game/Docs/preview_level3_world.png) |
+
+| Gameplay | Hasil Level | Hasil Akhir |
+|---|---|---|
+| ![Gameplay](Game/Docs/preview_gameplay.png) | ![Hasil](Game/Docs/preview_victory.png) | ![Tamat](Game/Docs/preview_victory3.png) |
+
+| Jeda | Game Over | Kredit |
+|---|---|---|
+| ![Jeda](Game/Docs/preview_pause.png) | ![Game Over](Game/Docs/preview_gameover.png) | ![Kredit](Game/Docs/preview_credits.png) |
 
 ## Struktur Repository
 
@@ -48,15 +66,15 @@ Dibuat dengan **Unity 6000.6.9f1** + **URP 17.6 (2D Lights)** untuk mata kuliah 
 1. Unity Hub → **Add** → pilih folder `Game/` → buka dengan **Unity 6000.6.9f1**.
 2. `Tools → Lentera Dirah → 1. Configure Pixel Art Assets & Tags`
 3. `Tools → Lentera Dirah → 2. Build Complete Prototype Scene`
-4. Tekan **Play** → **MULAI PENYUCIAN** → `E` lanjut dialog → jelajah, `SPACE` untuk stun, ambil 3 Lontar → sentuh Altar.
+4. Tekan **Play** → **MULAI BERMAIN** → pilih **Mudah/Normal/Sulit** → `E` lanjut dialog → jelajah level 1, `SPACE` untuk stun, ambil 3 Lontar → sentuh Altar → lanjut ke level 2 dan 3.
 
-Kontrol: `WASD`/panah bergerak · `SPACE` Holy Light Burst · `E` lanjut dialog.
+Kontrol: `WASD`/panah bergerak · `SPACE` Holy Light Burst · `E` lanjut dialog · `ESC` jeda/pengaturan.
 
 ## Build & Uji
 
 - Build macOS: `Tools → Lentera Dirah → 3. Build macOS App` → `Game/Builds/macOS/LenteraDirah.app`
 - Build Windows: `Tools → Lentera Dirah → 3. Build Windows EXE` → `Game/Builds/Windows/LenteraDirah.exe` (x64; butuh modul *Windows Build Support (Mono)*)
-- Uji otomatis (19 assertion, play-mode):
+- Uji otomatis (74 assertion, play-mode):
   ```bash
   "/Applications/Unity/Hub/Editor/6000.6.9f1/Unity.app/Contents/MacOS/Unity" \
     -batchmode -projectPath "$(pwd)/Game" \

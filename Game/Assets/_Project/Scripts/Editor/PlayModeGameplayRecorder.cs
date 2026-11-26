@@ -361,7 +361,8 @@ namespace LenteraDirah.Editor
             Click("HowToPlayCloseButton");
             yield return Wait(15);
 
-            GameManager.Instance.StartPurification();
+            GameManager.Instance.OpenDifficultySelect();
+            GameManager.Instance.StartGame(DifficultyLevel.Normal);
             yield return Wait(35);              // intro dialog
             GameManager.Instance.AcknowledgeDialog();
             yield return Wait(10);
@@ -412,7 +413,8 @@ namespace LenteraDirah.Editor
         private static IEnumerator LoseSequence()
         {
             yield return Wait(40);              // main menu
-            GameManager.Instance.StartPurification();
+            GameManager.Instance.OpenDifficultySelect();
+            GameManager.Instance.StartGame(DifficultyLevel.Normal);
             yield return Wait(30);
             GameManager.Instance.AcknowledgeDialog();
             yield return Wait(10);
