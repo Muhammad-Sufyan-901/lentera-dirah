@@ -137,6 +137,30 @@ Hasil: `Game/Builds/macOS/LenteraDirah.app` (scene langsung dipakai, tanpa setti
   -logFile -
 ```
 
+### D. Build Executable Windows (`.exe`)
+
+Prasyarat: modul **Windows Build Support (Mono)** terpasang di Editor
+(Unity Hub → *Installs* → ⚙️ pada 6000.6.9f1 → *Add modules*).
+
+`Tools → Lentera Dirah → 3. Build Windows EXE`
+Hasil: `Game/Builds/Windows/LenteraDirah.exe` (arsitektur **x64**, diset eksplisit di
+`BuildWindowsApp()` agar tidak mengikuti arsitektur host macOS ARM).
+
+Via CLI:
+
+```bash
+"/Applications/Unity/Hub/Editor/6000.6.9f1/Unity.app/Contents/MacOS/Unity" \
+  -batchmode -quit \
+  -projectPath "$(pwd)/Game" \
+  -executeMethod LenteraDirah.Editor.LenteraDirahSceneBuilder.BuildWindowsApp \
+  -logFile -
+```
+
+Folder `Game/Builds/Windows/` harus disalin **utuh** ke mesin Windows — `LenteraDirah.exe`
+tidak bisa dipisahkan dari `LenteraDirah_Data/`, `UnityPlayer.dll`, dan `MonoBleedingEdge/`.
+Build bersifat unsigned, jadi Windows SmartScreen dapat menampilkan peringatan saat pertama
+dijalankan (*More info → Run anyway*).
+
 ---
 
 ## 5. Skenario Rekaman Video Demo (3–4 menit)

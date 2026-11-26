@@ -33,7 +33,7 @@ Dibuat dengan **Unity 6000.6.9f1** + **URP 17.6 (2D Lights)** untuk mata kuliah 
 │   ├── Assets/_Project/       # Art, Animation, Audio, Prefabs, Scenes, Scripts (+ asmdef)
 │   ├── Docs/                  # Screenshot hasil render
 │   ├── Packages/  ProjectSettings/
-│   └── Builds/                # executable .app hasil build (tidak di-commit)
+│   └── Builds/                # executable macOS/.app & Windows/.exe (tidak di-commit)
 ├── docs/                      # GDD, laporan, HTML artifact, rencana proyek
 │   ├── gdd/  laporan/  html/
 │   ├── plan/                  # IMPLEMENTATION_PLAN, REVISI_DOKUMEN, skenario presentasi
@@ -55,6 +55,7 @@ Kontrol: `WASD`/panah bergerak · `SPACE` Holy Light Burst · `E` lanjut dialog.
 ## Build & Uji
 
 - Build macOS: `Tools → Lentera Dirah → 3. Build macOS App` → `Game/Builds/macOS/LenteraDirah.app`
+- Build Windows: `Tools → Lentera Dirah → 3. Build Windows EXE` → `Game/Builds/Windows/LenteraDirah.exe` (x64; butuh modul *Windows Build Support (Mono)*)
 - Uji otomatis (19 assertion, play-mode):
   ```bash
   "/Applications/Unity/Hub/Editor/6000.6.9f1/Unity.app/Contents/MacOS/Unity" \
